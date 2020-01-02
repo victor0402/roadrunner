@@ -25,4 +25,8 @@ app.post('/', (req, res) => {
   res.send(200)
 })
 
+app.get('/', (req, res) => {
+  res.send('Github Notifications is up and running!')
+})
+
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
