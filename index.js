@@ -15,7 +15,6 @@ app.post('/', (req, res) => {
   const json = req.body;
   const Parser = Parsers.getParser(json)
   const content = Parser.getContent(json)
-  console.log(content)
 
   console.log('body', json)
   console.log('zapier url:', ZAPIER_WEBHOOK_URL)
