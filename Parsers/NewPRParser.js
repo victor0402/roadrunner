@@ -4,6 +4,7 @@ const getContent = (json) => {
     link: json.pull_request.html_url,
     repository_name: json.repository.name,
     pull_request_id: json.pull_request.number,
+    branch_name: json.pull_request.head.ref
   }
 
   return content;
