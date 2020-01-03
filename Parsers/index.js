@@ -1,6 +1,7 @@
 const NewPRParser = require('./NewPRParser');
 const NewCommentParser = require('./NewCommentParser');
 const ClosedPRParser = require('./ClosedPRParser');
+const NewChangePushedParser = require('./NewChangePushedParser')
 
 const getParser = (json) => {
   if (
@@ -12,6 +13,8 @@ const getParser = (json) => {
     return NewCommentParser;
   } else if (json.action === 'closed') {
     return ClosedPRParser;
+  } else if (json.ref) {
+    return NewChangePushedParser;
   }
 }
 

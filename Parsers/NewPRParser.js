@@ -2,7 +2,8 @@ const getContent = (json) => {
   const content = {
     action_type: 'opened',
     link: json.pull_request.html_url,
-    repository_name: json.repository.name
+    repository_name: json.repository.name,
+    pull_request_id: json.pull_request.number,
   }
 
   return content;
