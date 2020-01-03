@@ -4,7 +4,7 @@ const ClosedPRParser = require('./ClosedPRParser');
 
 const getParser = (json) => {
   if (
-    json.action === 'opened' && !json.draft ||
+    json.action === 'opened' && !json.pull_request.draft ||
     json.action === 'ready_for_review'
   ) {
     return NewPRParser;

@@ -17,6 +17,13 @@ app.post('/', (req, res) => {
   console.log('zapier url:', ZAPIER_WEBHOOK_URL)
 
   const Parser = Parsers.getParser(json)
+
+  if (!Parser) {
+    console.log("No parser found!")
+    res.sendStatus(200)
+    return;
+  }
+
   const content = Parser.getContent(json)
 
   console.log('content:', content)
