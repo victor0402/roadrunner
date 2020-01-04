@@ -21,8 +21,8 @@ const start = async (json) => {
     pullRequestId
   });
 
-  console.log('New PR content', content);
-  console.log('Slack TS Thread', slackTSHash);
+  console.log('New Comment content', content);
+  console.log('New Comment Slack hash', slackTSHash);
   const slackThreadTS = await DB.retrieve(slackTSHash)
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
