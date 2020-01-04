@@ -40,7 +40,7 @@ const start = (json) => {
 
   savePRID({ pullRequestId, repositoryName, branchName });
 
-  const message = `${devGroup} please review this new PR: ${pullRequestLink}`;
+  const message = `${devGroup} :point_right:  please review this new PR: ${pullRequestLink}`;
 
   Slack.sendMessage({
     message,

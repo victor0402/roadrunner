@@ -23,7 +23,7 @@ const start = async (json) => {
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 
-  const message = "PR closed"
+  const message = "This PR is closed :merge:"
 
   Slack.sendMessage({
     message,

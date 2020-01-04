@@ -25,7 +25,7 @@ const start = async (json) => {
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 
-  const message = "There is a new change!!"
+  const message = ":pencil2: There is a new change"
 
   Slack.sendMessage({
     message,
