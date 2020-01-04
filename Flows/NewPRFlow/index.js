@@ -45,7 +45,7 @@ const start = (json) => {
     slackChannel: channel,
     callbackIdentifier: slackTSHash,
     callbackURL: 'http://gh-notifications.codelitt.dev/'
-  })
+  });
 };
 
 exports.start = start;
