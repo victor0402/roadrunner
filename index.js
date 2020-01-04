@@ -1,42 +1,76 @@
-const axios = require('axios')
 const bodyParser = require('body-parser');
-const express = require('express')
+const express = require('express');
+const DB = require('./db');
 
-const Parsers = require('./Parsers')
+const Flows = require('./Flows')
 
 const app = express()
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000
 
-const ZAPIER_WEBHOOK_URL = process.env.ZAPIER_WEBHOOK_URL;
-
-app.post('/', (req, res) => {
+const processFlowRequest = (req, res) => {
   const json = req.body;
-  console.log('body', json)
-  console.log('zapier url:', ZAPIER_WEBHOOK_URL)
 
-  const Parser = Parsers.getParser(json)
+  const Flow = Flows.getFlow(json)
 
-  if (!Parser) {
-    console.log("No parser found!")
+  if (!Flow) {
+    console.log("No flow found!")
     res.sendStatus(200)
     return;
   }
 
-  const content = Parser.getContent(json)
-
-  console.log('content:', content)
-
-  axios.post(ZAPIER_WEBHOOK_URL, content)
+  Flow.start(json)
 
   res.sendStatus(200)
+}
+
+app.post('/', (req, res) => {
+  processFlowRequest(req, res)
 })
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   res.send({
     status: 200
   })
+})
+
+app.get('/test-new-full-pr', async (req, res) => {
+  const newPRJson = require('./payload-examples/newFullPR.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
+app.get('/test-new-pr-comment', async (req, res) => {
+  const newPRJson = require('./payload-examples/newPRComment.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
+app.get('/test-close-pr', async (req, res) => {
+  const newPRJson = require('./payload-examples/closePR.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
+app.get('/test-new-change', async (req, res) => {
+  const newPRJson = require('./payload-examples/newPush.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
+app.post('/slack-callback', (req, res) => {
+  const json = req.body;
+  console.log('slack callback')
+  console.log('body', json)
+  const { callbackIdentifier, slackThreadTS } = json;
+  DB.save(callbackIdentifier, slackThreadTS)
+
+  res.sendStatus(200)
 })
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
