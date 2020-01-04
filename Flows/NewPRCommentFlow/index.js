@@ -22,7 +22,7 @@ const start = async (json) => {
   });
 
   console.log('New PR content', content);
-  console.log('Slack TS Thread', slackThreadTS);
+  console.log('Slack TS Thread', slackTSHash);
   const slackThreadTS = await DB.retrieve(slackTSHash)
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
