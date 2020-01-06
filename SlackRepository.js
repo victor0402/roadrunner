@@ -18,7 +18,36 @@ const repositoriesIdentifiers = {
   'zonda': {
     devGroup: '@zonda-devs',
     channel: 'team-zonda-dev'
-  }
+  },
+  'ay-design-library': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'ay-design-library': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'ay-properties-api': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'ay-the-hub': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'ay-excel-import-api': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'ay-property-intelligence': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
+  'team-maker': {
+    devGroup: '@team-maker-devs',
+    channel: 'team-teammaker-dev'
+  },
+
 }
 
 const getRepositoryData = (repositoryName) => repositoriesIdentifiers[repositoryName];
