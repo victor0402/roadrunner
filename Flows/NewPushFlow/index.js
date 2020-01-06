@@ -15,7 +15,7 @@ const start = async (json) => {
   const content = getContent(json);
   const { pullRequestId, repositoryName, branchName} = content;
 
-  if (branchName === 'master') {
+  if (branchName === 'master' || branchName === 'development') {
     return;
   }
 
