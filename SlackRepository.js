@@ -14,6 +14,10 @@ const repositoriesIdentifiers = {
   'team-maker': {
     devGroup: '@team-maker-devs',
     channel: 'team-teammaker-dev'
+  },
+  'zonda': {
+    devGroup: '@zonda-devs',
+    channel: 'team-zonda-dev'
   }
 }
 
