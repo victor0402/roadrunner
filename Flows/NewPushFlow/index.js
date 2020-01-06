@@ -15,6 +15,10 @@ const start = async (json) => {
   const content = getContent(json);
   const { pullRequestId, repositoryName, branchName} = content;
 
+  if (branchName === 'master') {
+    return;
+  }
+
   const slackTSHash = Utils.getSlackTSHash({
     branchName,
     repositoryName,

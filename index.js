@@ -65,8 +65,6 @@ app.get('/test-new-change', async (req, res) => {
 
 app.post('/slack-callback', (req, res) => {
   const json = req.body;
-  console.log('slack callback')
-  console.log('body', json)
   const { callbackIdentifier, slackThreadTS } = json;
   DB.save(callbackIdentifier, slackThreadTS)
 
