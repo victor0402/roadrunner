@@ -20,6 +20,10 @@ const start = async (json) => {
   });
 
   const slackThreadTS = await DB.retrieve(slackTSHash)
+
+  // Remove from DB to avoid further notifications
+  DB.destroy(slackTSHash)
+
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 

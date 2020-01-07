@@ -31,5 +31,15 @@ const retrieve = async (key) => {
   return result.value
 }
 
+const destroy = async (key) => {
+  const client = await getClient();
+  const db = client.db('keys')
+
+  const collection = db.collection('keys')
+  const result = await collection.deleteOne({ key })
+  return result.value
+}
+
 exports.save = save;
 exports.retrieve = retrieve;
+exports.destroy = destroy
