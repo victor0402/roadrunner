@@ -41,7 +41,7 @@ const repositoriesIdentifiers = {
   },
   'ay-property-intelligence': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-pia-dev'
   },
   'team-maker': {
     devGroup: '@team-maker-devs',
