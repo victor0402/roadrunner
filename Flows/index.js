@@ -12,7 +12,8 @@ const getFlow = (json) => {
   ) {
     return NewPRFlow;
   } else if (json.action === 'created') {
-    return NewPRCommentFlow;
+    // @TODO: update flow
+    //return NewPRCommentFlow;
   } else if (json.action === 'closed') {
     return ClosePRFlow;
   } else if (json.action === 'submitted') {
