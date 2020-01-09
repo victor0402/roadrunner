@@ -8,13 +8,14 @@ const getContent = (json) => (
     pullRequestId: json.pull_request.number,
     repositoryName: json.repository.name,
     branchName: json.pull_request.head.ref,
-    state: json.review.state
+    state: json.review.state,
+    message: json.review.body
   }
 );
 
 const start = async (json) => {
   const content = getContent(json);
-  const { pullRequestId, repositoryName, branchName} = content;
+  const { pullRequestId, repositoryName, branchName, message, state } = content;
 
   const slackTSHash = Utils.getSlackTSHash({
     branchName,
@@ -26,14 +27,21 @@ const start = async (json) => {
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 
-  const message = ":warning: changes requested!"
-  console.log(slackThreadTS)
+  let slackMessage = null;
 
-  Slack.sendMessage({
-    message,
-    slackChannel: channel,
-    threadID: slackThreadTS
-  })
+  if (state === 'changes_requested') {
+    slackMessage = ":warning: changes requested!"
+  } else if (message !== '') {
+    slackMessage = ':speech_balloon: There is a new message!'
+  }
+
+  if (slackMessage) {
+    Slack.sendMessage({
+      message: slackMessage,
+      slackChannel: channel,
+      threadID: slackThreadTS
+    })
+  }
 };
 
 exports.start = start;

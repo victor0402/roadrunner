@@ -66,7 +66,14 @@ app.get('/test-new-change', async (req, res) => {
 })
 
 app.get('/test-submit-review-changes-requested', async (req, res) => {
-  const newPRJson = require('./payload-examples/submitReviewChangesRequested')
+  const newPRJson = require('./payload-examples/submitReviewChangesRequested.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
+app.get('/test-submit-review-changes-approved', async (req, res) => {
+  const newPRJson = require('./payload-examples/submitReviewChangesApproved.json')
   processFlowRequest({
     body: newPRJson,
   }, res)
