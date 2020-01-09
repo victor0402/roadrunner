@@ -39,6 +39,10 @@ const repositoriesIdentifiers = {
     devGroup: '@ay-devs',
     channel: 'team-ay-dev'
   },
+  'ay-excel-import-app': {
+    devGroup: '@ay-devs',
+    channel: 'team-ay-dev'
+  },
   'ay-property-intelligence': {
     devGroup: '@ay-devs',
     channel: 'team-ay-pia-dev'
