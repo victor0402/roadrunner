@@ -7,7 +7,8 @@ const getContent = (json) => (
   {
     pullRequestId: json.pull_request.number,
     repositoryName: json.repository.name,
-    branchName: json.pull_request.head.ref
+    branchName: json.pull_request.head.ref,
+    state: json.review.state
   }
 );
 
@@ -25,7 +26,8 @@ const start = async (json) => {
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 
-  const message = ":speech_balloon: There is a new message!"
+  const message = ":warning: changes requested!"
+  console.log(slackThreadTS)
 
   Slack.sendMessage({
     message,

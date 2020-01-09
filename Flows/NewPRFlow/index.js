@@ -23,7 +23,6 @@ const savePRID = ({ pullRequestId, branchName, repositoryName }) => {
 
 const start = (json) => {
   const content = getContent(json);
-  console.log('New PR content:', content)
 
   const { repositoryName, pullRequestLink, branchName, pullRequestId } = content;
 
@@ -36,7 +35,6 @@ const start = (json) => {
     repositoryName,
     pullRequestId
   })
-  console.log('New PR slack hash', slackTSHash)
 
   savePRID({ pullRequestId, repositoryName, branchName });
 

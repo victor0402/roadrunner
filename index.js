@@ -65,6 +65,13 @@ app.get('/test-new-change', async (req, res) => {
   }, res)
 })
 
+app.get('/test-submit-review-changes-requested', async (req, res) => {
+  const newPRJson = require('./payload-examples/submitReviewChangesRequested')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
+
 app.post('/slack-callback', (req, res) => {
   const json = req.body;
   const { callbackIdentifier, slackThreadTS } = json;
