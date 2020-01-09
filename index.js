@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const DB = require('./db');
+const SlackRepository = require('./SlackRepository')
 
 const Flows = require('./Flows')
 
@@ -31,7 +32,8 @@ app.post('/', (req, res) => {
 
 app.get('/', async (req, res) => {
   res.send({
-    status: 200
+    status: 200,
+    configuration: SlackRepository.data
   })
 })
 
