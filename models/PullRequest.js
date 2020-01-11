@@ -42,7 +42,7 @@ class PullRequest {
 
     const pr = await collection.insertOne(this.toJson());
 
-    this.id = pr.ops[0]._id
+    this.id = pr.ops[0]._id.toString()
   }
 
   async close() {

@@ -1,10 +1,10 @@
-const Utils = require('../../Utils')
-const DB = require('../../db')
 const Slack = require('../../Slack')
 const SlackRepository = require('../../SlackRepository');
 const PullRequest = require('../../models/PullRequest').default
 const SlackMessage = require('../../models/SlackMessage').default
 const pullRequestParser = require('../../parsers/pullRequestParser');
+const GitHub = require('../../Github')
+const Commit = require('../../models/Commit').default
 
 const start = async (json) => {
   const pr = await new PullRequest(pullRequestParser.parse(json)).load();
@@ -27,7 +27,13 @@ const start = async (json) => {
     threadID: mainSlackMessage.ts
   });
 
- await pr.update()
+  await pr.update()
+
+  const commits = await GitHub.getCommits(pr.ghId)
+  commits.forEach(c => {
+    const commit = new Commit(pr.id, c.sha, c.commit.message)
+    commit.create()
+  })
 };
 
 exports.start = start;

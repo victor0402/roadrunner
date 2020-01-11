@@ -4,7 +4,9 @@ const PullRequest = require('../../models/PullRequest').default
 const pullRequestParser = require('../../parsers/pullRequestParser');
 
 const start = async (json) => {
-  const pr = new PullRequest(pullRequestParser.parse(json))
+  const data = pullRequestParser.parse(json);
+  console.log(data)
+  const pr = new PullRequest(data)
 
   if (!pr.isValid()) { return; }
 
@@ -24,7 +26,7 @@ const start = async (json) => {
 
     callbackIdentifier: pr.id,
 
-    callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
+    callbackURL: 'http://6b8ff797.ngrok.io/slack-callback'
   });
 };
 

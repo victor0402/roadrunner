@@ -15,11 +15,12 @@ const start = async (json) => {
     return;
   }
 
-  const pr = await PullRequest.findBy({
+  const query = {
     ghId: pullRequestId,
     branchName: branchName,
     repositoryName: repositoryName
-  })
+  }
+  const pr = await PullRequest.findBy(query)
 
   const slackThreadTS = await pr.getMainSlackMessage().ts;
 
