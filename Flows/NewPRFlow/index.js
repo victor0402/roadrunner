@@ -26,7 +26,7 @@ const start = async (json) => {
 
     callbackIdentifier: pr.id,
 
-    callbackURL: 'http://6b8ff797.ngrok.io/slack-callback'
+    callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
   });
 };
 
