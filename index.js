@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const DB = require('./db');
 const SlackRepository = require('./SlackRepository')
+require('dotenv').config()
 
 const Flows = require('./Flows')
 

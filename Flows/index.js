@@ -1,8 +1,7 @@
 const NewPRFlow = require('./NewPRFlow');
-const NewPRCommentFlow = require('./NewPRCommentFlow')
 const ClosePRFlow = require('./ClosePRFlow')
 const NewPushFlow = require('./NewPushFlow')
-const NewPullRequest = require('../NewPullRequest')
+const NewPullRequest = require('../models/PullRequest')
 const NewReviewSubmissionFlow = require('./NewReviewSubmissionFlow')
 
 const getFlow = (json) => {

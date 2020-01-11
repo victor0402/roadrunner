@@ -1,7 +1,7 @@
 const mongo = require('mongodb').MongoClient
-const url = 'mongodb+srv://engineering:AtThisPoint@cluster0-xwdex.mongodb.net/test?retryWrites=true&w=majority'
 
 const getClient = async () => {
+  const url = process.env.MONGO_URL;
   const client = await mongo.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
