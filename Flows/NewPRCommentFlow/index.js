@@ -11,6 +11,7 @@ const getContent = (json) => (
   }
 );
 
+// @TODO: update this flow if necessary
 const start = async (json) => {
   const content = getContent(json);
   const { pullRequestId, repositoryName, branchName} = content;

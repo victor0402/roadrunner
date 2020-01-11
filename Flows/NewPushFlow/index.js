@@ -1,18 +1,10 @@
-const Utils = require('../../Utils')
-const DB = require('../../db')
 const Slack = require('../../Slack')
 const SlackRepository = require('../../SlackRepository');
-
-const getContent = (json) => (
-   {
-    branchName: json.ref.match(/refs\/heads\/(.*)/)[1],
-    pullRequestId: json.repository.open_issues,
-    repositoryName: json.repository.name
-  }
-);
+const PullRequest = require('../../models/PullRequest').default
+const pushChangeParser = require('../../parsers/pushChangeParser');
 
 const start = async (json) => {
-  const content = getContent(json);
+  const content = pushChangeParser.parse(json);
   const { pullRequestId, repositoryName, branchName} = content;
 
   if (
@@ -23,13 +15,14 @@ const start = async (json) => {
     return;
   }
 
-  const slackTSHash = Utils.getSlackTSHash({
-    branchName,
-    repositoryName,
-    pullRequestId
-  });
+  const pr = await PullRequest.findBy({
+    ghId: 52 || pullRequestId,
+    branchName: 'kaiomagalhaes-patch-50' || branchName,
+    repositoryName: "gh-hooks-repo-test" || repositoryName
+  })
 
-  const slackThreadTS = await DB.retrieve(slackTSHash)
+  const slackThreadTS = await pr.getMainSlackMessage().ts;
+
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 

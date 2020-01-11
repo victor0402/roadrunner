@@ -1,30 +1,24 @@
-const Utils = require('../../Utils')
-const DB = require('../../db')
 const Slack = require('../../Slack')
 const SlackRepository = require('../../SlackRepository');
+const PullRequest = require('../../models/PullRequest').default
+const pullRequestParser = require('../../parsers/pullRequestParser');
 
 const getContent = (json) => (
   {
-    pullRequestId: json.pull_request.number,
-    repositoryName: json.repository.name,
-    branchName: json.pull_request.head.ref,
     state: json.review.state,
     message: json.review.body
   }
 );
 
 const start = async (json) => {
+  const pr = await new PullRequest(pullRequestParser.parse(json)).load();
+
   const content = getContent(json);
-  const { pullRequestId, repositoryName, branchName, message, state } = content;
+  const { message, state } = content;
+  const slackMainMessage = await pr.getMainSlackMessage();
 
-  const slackTSHash = Utils.getSlackTSHash({
-    branchName,
-    repositoryName,
-    pullRequestId
-  });
-
-  const slackThreadTS = await DB.retrieve(slackTSHash)
-  const repositoryData = SlackRepository.getRepositoryData(repositoryName)
+  const slackThreadTS = slackMainMessage.ts;
+  const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
   const { channel } = repositoryData;
 
   let slackMessage = null;

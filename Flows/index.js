@@ -1,13 +1,11 @@
 const NewPRFlow = require('./NewPRFlow');
 const ClosePRFlow = require('./ClosePRFlow')
 const NewPushFlow = require('./NewPushFlow')
-const NewPullRequest = require('../models/PullRequest')
 const NewReviewSubmissionFlow = require('./NewReviewSubmissionFlow')
 
 const getFlow = (json) => {
   if (
-    json.action === 'opened' && NewPullRequest.isValid(json) ||
-    json.action === 'ready_for_review'
+    json.action === 'opened' || json.action === 'ready_for_review'
   ) {
     return NewPRFlow;
   } else if (json.action === 'created') {

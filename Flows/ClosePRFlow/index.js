@@ -2,29 +2,21 @@ const Utils = require('../../Utils')
 const DB = require('../../db')
 const Slack = require('../../Slack')
 const SlackRepository = require('../../SlackRepository');
-
-const getContent = (json) => ({
-  repositoryName: json.repository.name,
-  pullRequestId: json.pull_request.number,
-  branchName: json.pull_request.head.ref
-});
+const PullRequest = require('../../models/PullRequest').default
+const SlackMessage = require('../../models/SlackMessage').default
+const pullRequestParser = require('../../parsers/pullRequestParser');
 
 const start = async (json) => {
-  const content = getContent(json);
-  const { pullRequestId, repositoryName, branchName } = content;
+  const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
-  const slackTSHash = Utils.getSlackTSHash({
-    branchName,
-    repositoryName,
-    pullRequestId
-  });
+  if (pr.isClosed()) {
+    return;
+  }
 
-  const slackThreadTS = await DB.retrieve(slackTSHash)
+  const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
 
-  // Remove from DB to avoid further notifications
-  DB.destroy(slackTSHash)
+  const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
 
-  const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
 
   const message = "This PR is closed :merged:"
@@ -32,8 +24,10 @@ const start = async (json) => {
   Slack.sendMessage({
     message,
     slackChannel: channel,
-    threadID: slackThreadTS
-  })
+    threadID: mainSlackMessage.ts
+  });
+
+ await pr.update()
 };
 
 exports.start = start;

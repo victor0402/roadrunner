@@ -7,7 +7,21 @@ const getClient = async () => {
     useUnifiedTopology: true
   })
 
-  return client;
+  client.db('keys');
+
+  return client.db('keys');
+}
+
+const getCollection = async (collectionName) => {
+  const url = process.env.MONGO_URL;
+  const client = await mongo.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+
+  const database = client.db('keys');
+
+  return database.collection(collectionName)
 }
 
 const save = async (key, value) => {
@@ -43,3 +57,5 @@ const destroy = async (key) => {
 exports.save = save;
 exports.retrieve = retrieve;
 exports.destroy = destroy
+exports.getClient = getClient
+exports.getCollection = getCollection

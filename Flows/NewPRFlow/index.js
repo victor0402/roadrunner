@@ -1,50 +1,30 @@
-const DB = require('../../db');
 const Slack = require('../../Slack');
 const SlackRepository = require('../../SlackRepository');
-const Utils = require('../../Utils');
+const PullRequest = require('../../models/PullRequest').default
+const pullRequestParser = require('../../parsers/pullRequestParser');
 
-const getContent = (json) => (
-  {
-    branchName: json.pull_request.head.ref,
-    pullRequestLink: json.pull_request.html_url,
-    pullRequestId: json.pull_request.number,
-    repositoryName: json.repository.name,
-  }
-)
+const start = async (json) => {
+  const pr = new PullRequest(pullRequestParser.parse(json))
 
-const savePRID = ({ pullRequestId, branchName, repositoryName }) => {
-  const PRIDHash = Utils.getPRIDHash({
-    branchName,
-    repositoryName
-  });
+  if (!pr.isValid()) { return; }
 
-  DB.save(PRIDHash, pullRequestId)
-}
-
-const start = (json) => {
-  const content = getContent(json);
-
-  const { repositoryName, pullRequestLink, branchName, pullRequestId } = content;
-
-  const repositoryData = SlackRepository.getRepositoryData(repositoryName)
+  const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
 
   const { devGroup, channel } = repositoryData;
 
-  const slackTSHash = Utils.getSlackTSHash({
-    branchName,
-    repositoryName,
-    pullRequestId
-  })
+  await pr.create()
 
-  savePRID({ pullRequestId, repositoryName, branchName });
-
-  const message = `${devGroup} :point_right:  please review this new PR: ${pullRequestLink}`;
+  const message = `${devGroup} :point_right:  please review this new PR: ${pr.link}`;
 
   Slack.sendMessage({
     message,
     slackChannel: channel,
-    callbackIdentifier: slackTSHash,
-    callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
+    branchName: pr.branchName,
+    repositoryName: pr.repositoryName,
+
+    callbackIdentifier: pr.id,
+
+    callbackURL: 'http://2c6398c4.ngrok.io/slack-callback'
   });
 };
 

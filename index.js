@@ -2,6 +2,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const DB = require('./db');
 const SlackRepository = require('./SlackRepository')
+const PullRequest = require('./models/PullRequest').default
+const SlackMessage = require('./models/SlackMessage').default
 require('dotenv').config()
 
 const Flows = require('./Flows')
@@ -83,9 +85,27 @@ app.get('/test-submit-review-changes-approved', async (req, res) => {
 app.post('/slack-callback', (req, res) => {
   const json = req.body;
   const { callbackIdentifier, slackThreadTS } = json;
-  DB.save(callbackIdentifier, slackThreadTS)
+
+  const slackMessage = new SlackMessage(callbackIdentifier, slackThreadTS)
+  slackMessage.create()
 
   res.sendStatus(200)
 })
+
+app.get('/test-github', async (req, res) => {
+
+ // DB.save(`pr-id`, 'test', 'commits')
+
+//  console.log(await DB.retrieve('pr-id'), 'commits')
+
+  const a = await PullRequest.findById("5e1a308592df068a53c5f01c")
+  console.log('kiko')
+
+  console.log('lala', a)
+
+  res.sendCode(200)
+})
+
+
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
