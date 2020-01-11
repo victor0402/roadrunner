@@ -1,5 +1,4 @@
 const db = require('../db');
-const pry = require('pry')
 
 const collectionName = 'slackMessages';
 
