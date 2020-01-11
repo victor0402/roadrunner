@@ -16,9 +16,9 @@ const start = async (json) => {
   }
 
   const pr = await PullRequest.findBy({
-    ghId: 52 || pullRequestId,
-    branchName: 'kaiomagalhaes-patch-50' || branchName,
-    repositoryName: "gh-hooks-repo-test" || repositoryName
+    ghId: pullRequestId,
+    branchName: branchName,
+    repositoryName: repositoryName
   })
 
   const slackThreadTS = await pr.getMainSlackMessage().ts;
