@@ -1,4 +1,5 @@
 const db = require('../db');
+const PullRequest = require('./PullRequest').default
 
 const collectionName = 'commits';
 
@@ -9,6 +10,10 @@ class Commit {
     this.message = message;
   }
 
+  async getPullRequest() {
+    this.pullRequest = await PullRequest.findById(this.prId)
+    return this.pullRequest;
+  }
   async create() {
     const collection = await db.getCollection(collectionName);
 
@@ -19,6 +24,14 @@ class Commit {
     });
 
     this.id = slackMessage.ops[0]._id
+  }
+
+  static async findBySha(sha) {
+    const collection = await db.getCollection(collectionName);
+    const result = await collection.findOne({
+      sha
+    });
+    return new Commit(result.prId, result.sha, result.message)
   }
 
   static async findByPRId(prId) {

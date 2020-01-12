@@ -5,7 +5,6 @@ const pullRequestParser = require('../../parsers/pullRequestParser');
 
 const start = async (json) => {
   const data = pullRequestParser.parse(json);
-  console.log(data)
   const pr = new PullRequest(data)
 
   if (!pr.isValid()) { return; }

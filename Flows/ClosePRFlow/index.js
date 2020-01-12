@@ -5,11 +5,15 @@ const SlackMessage = require('../../models/SlackMessage').default
 const pullRequestParser = require('../../parsers/pullRequestParser');
 const GitHub = require('../../Github')
 const Commit = require('../../models/Commit').default
+const SendChangelogFlow = require('../SendChangelogFlow');
 
 const start = async (json) => {
   const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
-  if (pr.isClosed()) {
+  if (!pr.id && pr.isClosed()) {
+    return;
+  } else if (pr.isDeployPR()) {
+    SendChangelogFlow.start(pr)
     return;
   }
 

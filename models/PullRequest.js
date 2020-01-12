@@ -10,6 +10,7 @@ const collectionName = 'pullRequests';
 
 class PullRequest {
   constructor(data) {
+    this.id = data._id
     this.branchName = data.branchName;
     this.link = data.link;
     this.ghId = data.ghId;
@@ -55,7 +56,7 @@ class PullRequest {
     const json = this.toJson();
     delete json.id
     const objectID = new ObjectId(this.id)
-    return await collection.updateOne({ _id: objectID }, { $set: json})
+    return await collection.updateOne({ _id: objectID }, { $set: json })
   }
 
   static async findById(id) {
@@ -69,6 +70,14 @@ class PullRequest {
     return new PullRequest(response)
   }
 
+  static async list(filter = {}) {
+    const collection = await db.getCollection(collectionName);
+    const response = await collection.find(filter);
+
+    const array = await response.toArray()
+    return array.map(doc => new PullRequest(doc))
+  }
+
   async load() {
     const collection = await db.getCollection(collectionName);
     const pr = await collection.findOne({
@@ -76,7 +85,10 @@ class PullRequest {
       ghId: this.ghId,
       repositoryName: this.repositoryName,
     });
-    this.id = pr._id.toString()
+
+    if (pr) {
+      this.id = pr._id.toString()
+    }
     return this;
   }
 
