@@ -5,7 +5,7 @@ const pushChangeParser = require('../../parsers/pushChangeParser');
 
 const start = async (json) => {
   const content = pushChangeParser.parse(json);
-  const { pullRequestId, repositoryName, branchName} = content;
+  const { repositoryName, branchName} = content;
 
   if (
     branchName === 'master' ||
@@ -16,13 +16,19 @@ const start = async (json) => {
   }
 
   const query = {
-    ghId: pullRequestId,
     branchName: branchName,
     repositoryName: repositoryName
   }
-  const pr = await PullRequest.findBy(query)
 
-  const slackThreadTS = await pr.getMainSlackMessage().ts;
+  const pr = await PullRequest.findBy(query)
+  if (!pr) {
+    return;
+  }
+  const mainSlackMessage = await pr.getMainSlackMessage();
+
+  const slackThreadTS = mainSlackMessage.ts;
+
+  console.log('ts', slackThreadTS)
 
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;

@@ -10,7 +10,7 @@ const collectionName = 'pullRequests';
 
 class PullRequest {
   constructor(data) {
-    this.id = data._id
+    this.id = data.id || data._id ? data._id.toString() : undefined
     this.branchName = data.branchName;
     this.link = data.link;
     this.ghId = data.ghId;
@@ -34,7 +34,7 @@ class PullRequest {
   }
 
   async getMainSlackMessage() {
-    this.mainSlackMessage = this.mainSlackMessage || await SlackMessage.findByPRId(this.id)
+    this.mainSlackMessage = await SlackMessage.findByPRId(this.id)
     return this.mainSlackMessage;
   }
 
@@ -67,6 +67,9 @@ class PullRequest {
   static async findBy(query) {
     const collection = await db.getCollection(collectionName);
     const response = await collection.findOne(query);
+    if (!response) {
+      return null;
+    }
     return new PullRequest(response)
   }
 
