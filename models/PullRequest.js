@@ -22,11 +22,11 @@ class PullRequest {
   }
 
   isDeployPR() {
-    return this.title === devToQATitle || this.title === QAToMasterTitle
+    return this.title.toLowerCase() === devToQATitle || this.title.toLowerCase() === QAToMasterTitle
   }
 
   isValid() {
-    return !this.draft && !this.isDeployPR(this.title.toLowerCase())
+    return !this.draft && !this.isDeployPR()
   }
 
   isClosed() {
