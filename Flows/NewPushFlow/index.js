@@ -21,14 +21,13 @@ const start = async (json) => {
   }
 
   const pr = await PullRequest.findBy(query)
-  if (!pr) {
+  if (!pr || pr.isClosed()) {
     return;
   }
+
   const mainSlackMessage = await pr.getMainSlackMessage();
 
   const slackThreadTS = mainSlackMessage.ts;
-
-  console.log('ts', slackThreadTS)
 
   const repositoryData = SlackRepository.getRepositoryData(repositoryName)
   const { channel } = repositoryData;
