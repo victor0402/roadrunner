@@ -31,6 +31,8 @@ const start = async (json) => {
     threadID: mainSlackMessage.ts
   });
 
+  pr.close()
+
   await pr.update()
 
   const commits = await GitHub.getCommits(pr.ghId)
