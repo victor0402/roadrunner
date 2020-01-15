@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const DB = require('./db');
 const SlackRepository = require('./SlackRepository')
 const PullRequest = require('./models/PullRequest').default
 const SlackMessage = require('./models/SlackMessage').default
@@ -37,6 +36,15 @@ app.get('/', async (req, res) => {
   res.send({
     status: 200,
     configuration: SlackRepository.data
+  })
+})
+
+app.get('/open-prs', async (req, res) => {
+  const prs = await PullRequest.list({state: 'open'})
+  res.send({
+    status: 200,
+    length: prs.length,
+    data: prs.map(pr => ({state: pr.state, link: pr.link}))
   })
 })
 
