@@ -55,7 +55,6 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 })
 
 app.get('/open-prs', async (req, res) => {
-
   const prs = await PullRequest.list({ state: 'open' })
 
   res.send({

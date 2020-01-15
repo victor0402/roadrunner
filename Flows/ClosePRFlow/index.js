@@ -34,11 +34,12 @@ const start = async (json) => {
   pr.close()
 
   await pr.update()
+  console.log('pr', pr)
 
   const commits = await GitHub.getCommits(pr.ghId)
-  commits.forEach(c => {
+  commits.forEach(async c => {
     const commit = new Commit(pr.id, c.sha, c.commit.message)
-    commit.create()
+    console.log(await commit.create())
   })
 };
 

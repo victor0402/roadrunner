@@ -17,13 +17,15 @@ class Commit {
   async create() {
     const collection = await db.getCollection(collectionName);
 
-    const slackMessage = await collection.insertOne({
+    const commit = await collection.insertOne({
       prId: this.prId,
       sha: this.sha,
       message: this.message,
     });
 
-    this.id = slackMessage.ops[0]._id
+    this.id = commit.ops[0]._id
+
+    return this;
   }
 
   static async findBySha(sha) {
@@ -31,6 +33,10 @@ class Commit {
     const result = await collection.findOne({
       sha
     });
+    console.log('commit result', result, sha)
+    if(!result) {
+      return;
+    }
     return new Commit(result.prId, result.sha, result.message)
   }
 
