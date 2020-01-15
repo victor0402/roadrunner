@@ -50,7 +50,7 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({ state: pr.state, link: pr.link }))
+    data: prs.map(pr => ({ state: pr.state, link: pr.link, title: pr.title })),
   })
 })
 
@@ -124,9 +124,7 @@ app.get('/test-github', async (req, res) => {
   //  console.log(await DB.retrieve('pr-id'), 'commits')
 
   const a = await PullRequest.findById("5e1a308592df068a53c5f01c")
-  console.log('kiko')
 
-  console.log('lala', a)
 
   res.sendCode(200)
 })
