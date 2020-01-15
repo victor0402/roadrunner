@@ -78,6 +78,7 @@ class PullRequest {
     const response = await collection.find(filter);
 
     const array = await response.toArray()
+
     return array.map(doc => new PullRequest(doc))
   }
 

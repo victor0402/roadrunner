@@ -39,12 +39,29 @@ app.get('/', async (req, res) => {
   })
 })
 
-app.get('/open-prs', async (req, res) => {
-  const prs = await PullRequest.list({state: 'open'})
+app.get(`/open-prs/:devGroup`, async (req, res) => {
+  const devGroup = req.params.devGroup;
+  const repositoryNames = Object.keys(SlackRepository.data);
+
+  const filteredRepositories = repositoryNames.filter(k => SlackRepository.data[k].devGroup === `@${devGroup}`)
+
+  const prs = await PullRequest.list({ state: 'open', repositoryName: { $in: filteredRepositories }})
+
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({state: pr.state, link: pr.link}))
+    data: prs.map(pr => ({ state: pr.state, link: pr.link }))
+  })
+})
+
+app.get('/open-prs', async (req, res) => {
+
+  const prs = await PullRequest.list({ state: 'open' })
+
+  res.send({
+    status: 200,
+    length: prs.length,
+    data: prs.map(pr => ({ state: pr.state, link: pr.link }))
   })
 })
 
@@ -102,9 +119,9 @@ app.post('/slack-callback', (req, res) => {
 
 app.get('/test-github', async (req, res) => {
 
- // DB.save(`pr-id`, 'test', 'commits')
+  // DB.save(`pr-id`, 'test', 'commits')
 
-//  console.log(await DB.retrieve('pr-id'), 'commits')
+  //  console.log(await DB.retrieve('pr-id'), 'commits')
 
   const a = await PullRequest.findById("5e1a308592df068a53c5f01c")
   console.log('kiko')
