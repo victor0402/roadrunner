@@ -1,3 +1,4 @@
+const Github = require('./Github');
 const bodyParser = require('body-parser');
 const express = require('express');
 const SlackRepository = require('./SlackRepository')
@@ -98,6 +99,12 @@ app.get('/test-submit-review-changes-requested', async (req, res) => {
     body: newPRJson,
   }, res)
 })
+app.get('/test-submit-review-changes-requested', async (req, res) => {
+  const newPRJson = require('./payload-examples/submitReviewChangesRequested.json')
+  processFlowRequest({
+    body: newPRJson,
+  }, res)
+})
 
 app.get('/test-submit-review-changes-approved', async (req, res) => {
   const newPRJson = require('./payload-examples/submitReviewChangesApproved.json')
@@ -116,16 +123,11 @@ app.post('/slack-callback', (req, res) => {
   res.sendStatus(200)
 })
 
-app.get('/test-github', async (req, res) => {
+app.get('/test-github/:prId', async (req, res) => {
+const prId = req.params.prId;
+const commit = await Github.getCommits(prId)
 
-  // DB.save(`pr-id`, 'test', 'commits')
-
-  //  console.log(await DB.retrieve('pr-id'), 'commits')
-
-  const a = await PullRequest.findById("5e1a308592df068a53c5f01c")
-
-
-  res.sendCode(200)
+  res.send(commit)
 })
 
 
