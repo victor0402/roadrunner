@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000
 
-const processFlowRequest = (req, res) => {
+const processFlowRequest = async (req, res) => {
   const json = req.body;
 
-  const Flow = Flows.getFlow(json)
+  const Flow = await Flows.getFlow(json)
 
   if (!Flow) {
     console.log("No flow found!")

@@ -1,9 +1,11 @@
+const PullRequest = require('../models/PullRequest').default
+const pushChangeParser = require('../parsers/pushChangeParser');
 const NewPRFlow = require('./NewPRFlow');
 const ClosePRFlow = require('./ClosePRFlow')
 const NewPushFlow = require('./NewPushFlow')
 const NewReviewSubmissionFlow = require('./NewReviewSubmissionFlow')
 
-const getFlow = (json) => {
+const getFlow = async (json) => {
   if (
     json.action === 'opened' || json.action === 'ready_for_review'
   ) {
@@ -18,10 +20,27 @@ const getFlow = (json) => {
   } else if (json.action === 'submitted') {
     console.log('review submission flow')
     return NewReviewSubmissionFlow;
-  } else if (!json.action && json.ref) {
+  } else if (await isANewValidPush(json)) {
     console.log('new push flow')
     return NewPushFlow;
   }
 }
+
+const isANewValidPush = async (json) => {
+  const content = pushChangeParser.parse(json);
+  const { repositoryName, branchName} = content;
+
+  if (branchName === 'master' || branchName === 'development' || branchName === 'develop') {
+    return;
+  }
+
+  const query = {
+    branchName: branchName,
+    repositoryName: repositoryName
+  }
+
+  const pr = await PullRequest.findBy(query)
+  return pr && !pr.isClosed();
+};
 
 exports.getFlow = getFlow;

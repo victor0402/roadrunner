@@ -7,23 +7,12 @@ const start = async (json) => {
   const content = pushChangeParser.parse(json);
   const { repositoryName, branchName} = content;
 
-  if (
-    branchName === 'master' ||
-    branchName === 'development' ||
-    branchName === 'develop'
-  ) {
-    return;
-  }
-
   const query = {
     branchName: branchName,
     repositoryName: repositoryName
-  }
+  };
 
   const pr = await PullRequest.findBy(query)
-  if (!pr || pr.isClosed()) {
-    return;
-  }
 
   const mainSlackMessage = await pr.getMainSlackMessage();
 

@@ -4,10 +4,11 @@ const octokit = new Octokit({
   auth: process.env.GIT_AUTH
 });
 
-const getCommits = async (pullRequestId) => {
+const getCommits = async (pullRequestId, owner, repository) => {
+  console.log('getting commits:', pullRequestId, owner, repository)
   const commits = await octokit.pulls.listCommits({
-    owner: 'kaiomagalhaes',
-    repo: 'gh-hooks-repo-test',
+    owner,
+    repo: repository,
     pull_number: pullRequestId
   })
 

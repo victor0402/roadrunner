@@ -24,6 +24,11 @@ class SlackMessage {
     const result = await collection.findOne({
       prId
     });
+
+    if (!result) {
+      console.log("Couldn't find result for ", prId);
+      return null;
+    }
     return new SlackMessage(result.prId, result.ts)
   }
 };

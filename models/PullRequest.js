@@ -19,6 +19,7 @@ class PullRequest {
     this.draft = data.draft;
     this.state = data.state;
     this.closed = data.closed;
+    this.owner = data.owner;
   }
 
   isDeployPR() {

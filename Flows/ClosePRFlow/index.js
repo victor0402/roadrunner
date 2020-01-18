@@ -34,9 +34,10 @@ const start = async (json) => {
   pr.close()
 
   await pr.update()
+  console.log('TEST ClosePRFlow')
   console.log('pr', pr)
 
-  const commits = await GitHub.getCommits(pr.ghId)
+  const commits = await GitHub.getCommits(pr.ghId, pr.owner, pr.repositoryName)
   commits.forEach(async c => {
     const commit = new Commit(pr.id, c.sha, c.commit.message)
     console.log(await commit.create())
