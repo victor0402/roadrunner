@@ -1,13 +1,18 @@
-import Github from './src/Github.mjs';
+import dotenv from 'dotenv'
+dotenv.config()
+
 import bodyParser from 'body-parser';
 import express from 'express';
 import SlackRepository from './SlackRepository.mjs';
 import PullRequest from './models/PullRequest.mjs'
+import Github from './Github.mjs';
 import SlackMessage from './models/SlackMessage.mjs';
 import Flows from './Flows/index.mjs';
-import dotenv from 'dotenv'
 
-dotenv.config()
+
+import closePrJson from './payload-examples/closePR.json';
+import newFullPrJson from './payload-examples/newFullPR.json';
+
 
 const app = express()
 app.use(bodyParser.json());
@@ -67,9 +72,8 @@ app.get('/open-prs', async (req, res) => {
 })
 
 app.get('/test-new-full-pr', async (req, res) => {
-  const newPRJson = require('./payload-examples/newFullPR.json')
   processFlowRequest({
-    body: newPRJson,
+    body: newFullPrJson,
   }, res)
 })
 
@@ -81,9 +85,8 @@ app.get('/test-new-pr-comment', async (req, res) => {
 })
 
 app.get('/test-close-pr', async (req, res) => {
-  const newPRJson = require('./payload-examples/closePR.json')
   processFlowRequest({
-    body: newPRJson,
+    body: closePrJson,
   }, res)
 })
 

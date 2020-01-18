@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const SLACK_PUSHER_URL = process.env.ZAPIER_WEBHOOK_URL;
-
 class Slack {
   static sendMessage({ message, slackChannel, threadID, callbackIdentifier, callbackURL }) {
+    const SLACK_PUSHER_URL = process.env.ZAPIER_WEBHOOK_URL;
+
     const payload = {
       message,
       slackChannel,

@@ -25,10 +25,6 @@ class PullRequest {
     return this.title.toLowerCase() === devToQATitle || this.title.toLowerCase() === QAToMasterTitle
   }
 
-  isValid() {
-    return !this.draft && !this.isDeployPR()
-  }
-
   isClosed() {
     return !!this.closed;
   }

@@ -1,20 +1,18 @@
-import NewPRFlow from './NewPRFlow/index.mjs'
-import ClosePRFlow from './ClosePRFlow/index.mjs'
+import NewPullRequestFlow from './NewPullRequestFlow/index.mjs'
+import ClosePullRequestFlow from './ClosePullRequestFlow/index.mjs'
 import NewPushFlow from './NewPushFlow/index.mjs'
 import NewReviewSubmissionFlow from './NewReviewSubmissionFlow/index.mjs'
 
 const getFlow = async (json) => {
-  if (
-    json.action === 'opened' || json.action === 'ready_for_review'
-  ) {
+  if (NewPullRequestFlow.isFlow(json)) {
     console.log('new pr flow')
-    return NewPRFlow;
+    return NewPullRequestFlow;
   } else if (json.action === 'created') {
     // @TODO: update flow
     //return NewPRCommentFlow;
-  } else if (ClosePrFlow.isAValidClosePRFlow(json)) {
+  } else if (ClosePullRequestFlow.isFlow(json)) {
     console.log('close pr flow')
-    return ClosePRFlow;
+    return ClosePullRequestFlow;
   } else if (json.action === 'submitted') {
     console.log('review submission flow')
     return NewReviewSubmissionFlow;
@@ -24,4 +22,6 @@ const getFlow = async (json) => {
   }
 }
 
-export default getFlow;
+export default {
+  getFlow,
+}

@@ -26,7 +26,7 @@ class SlackMessage {
     });
 
     if (!result) {
-      console.log("Couldn't find result for ", prId);
+      console.log("Couldn't find Slack message for ts: ", prId);
       return null;
     }
     return new SlackMessage(result.prId, result.ts)

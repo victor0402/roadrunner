@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-modules src/index.mjs",
-    "start:dev": "nodemon --experimental-modules src/index.mjs"
+    "start": "node --experimental-modules --experimental-json-modules src/index.mjs",
+    "start:dev": "nodemon --experimental-modules --experimental-json-modules src/index.mjs"
   },
   "repository": {
     "type": "git",
