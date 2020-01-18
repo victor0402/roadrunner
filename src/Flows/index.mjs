@@ -8,7 +8,7 @@ const getFlow = async (json) => {
     return NewPullRequestFlow;
   } else if (await ClosePullRequestFlow.isFlow(json)) {
     return ClosePullRequestFlow;
-  } else if (NewReviewSubmissionFlow.isFlow(json)) {
+  } else if (await NewReviewSubmissionFlow.isFlow(json)) {
     return NewReviewSubmissionFlow;
   } else if (await UpdatePullRequestCodeFlow.isFlow(json)) {
     return UpdatePullRequestCodeFlow;

@@ -47,8 +47,8 @@ class NewReviewSubmissionFlow {
     }
   };
 
-  async isFlow(json) {
-    return json.action === 'submitted'
+  static async isFlow(json) {
+    return json.action === 'submitted';
   };
 }
 

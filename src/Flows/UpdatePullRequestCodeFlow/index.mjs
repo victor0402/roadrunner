@@ -36,6 +36,10 @@ class UpdatePullRequestCodeFlow {
   };
 
   static async isFlow(json) {
+    if (!json.ref) {
+      return;
+    }
+
     const content = pushChangeParser.parse(json);
     const { repositoryName, branchName } = content;
 
