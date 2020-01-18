@@ -2,15 +2,13 @@ import mongodb from 'mongodb';
 import db from '../db.mjs';
 import SlackMessage from './SlackMessage.mjs';
 
-const devToQATitle = 'development to qa'
-const QAToMasterTitle = 'qa to master'
-
 const collectionName = 'pullRequests';
 
 class PullRequest {
   constructor(data) {
     this.id = data.id || data._id ? data._id.toString() : undefined
     this.branchName = data.branchName;
+    this.baseBranchName = data.baseBranchName;
     this.link = data.link;
     this.ghId = data.ghId;
     this.repositoryName = data.repositoryName;
@@ -22,7 +20,7 @@ class PullRequest {
   }
 
   isDeployPR() {
-    return this.title.toLowerCase() === devToQATitle || this.title.toLowerCase() === QAToMasterTitle
+    return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && this.branchName === 'develop'
   }
 
   isClosed() {

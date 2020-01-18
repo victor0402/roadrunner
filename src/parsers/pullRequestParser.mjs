@@ -1,6 +1,7 @@
 const parse = (json) => {
   return {
     branchName: json.pull_request.head.ref,
+    baseBranchName: json.pull_request.base.ref,
     link: json.pull_request.html_url,
     ghId: json.pull_request.number,
     repositoryName: json.repository.name,
