@@ -26,6 +26,7 @@ class Commit {
 
     this.id = commit.ops[0]._id
 
+    console.log(`creating commit with sha ${this.sha}`)
     return this;
   }
 
