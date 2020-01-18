@@ -33,8 +33,9 @@ class Commit {
     const result = await collection.findOne({
       sha
     });
-    console.log('commit result', result, sha)
+
     if(!result) {
+      console.log(`Couldn't find commit with sha ${sha}`)
       return;
     }
     return new Commit(result.prId, result.sha, result.message)
@@ -45,6 +46,10 @@ class Commit {
     const result = await collection.findOne({
       prId
     });
+    if(!result) {
+      console.log(`Couldn't find commit with prId ${prId}`)
+      return;
+    }
     return new Commit(result.prId, result.sha, result.message)
   }
 };

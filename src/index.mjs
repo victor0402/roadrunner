@@ -1,4 +1,4 @@
-import Github from './Github.mjs';
+import Github from './src/Github.mjs';
 import bodyParser from 'body-parser';
 import express from 'express';
 import SlackRepository from './SlackRepository.mjs';
