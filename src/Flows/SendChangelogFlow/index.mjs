@@ -13,6 +13,8 @@ class SendChangelogFlow {
     const { deployChannel } = repositoryData;
 
     if (!deployChannel) {
+      console.log('No deploy channel found.')
+      console.log('Flow aborted!')
       return;
     }
 
@@ -29,6 +31,7 @@ class SendChangelogFlow {
 
     if (pullRequests.length === 0) {
       console.log("We couldn't find any pull requests on our database for this release", pr);
+      console.log('Flow aborted!')
       return;
     }
 
