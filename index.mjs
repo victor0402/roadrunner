@@ -1,12 +1,13 @@
-const Github = require('./Github');
-const bodyParser = require('body-parser');
-const express = require('express');
-const SlackRepository = require('./SlackRepository')
-const PullRequest = require('./models/PullRequest').default
-const SlackMessage = require('./models/SlackMessage').default
-require('dotenv').config()
+import Github from './Github.mjs';
+import bodyParser from 'body-parser';
+import express from 'express';
+import SlackRepository from './SlackRepository.mjs';
+import PullRequest from './models/PullRequest.mjs'
+import SlackMessage from './models/SlackMessage.mjs';
+import Flows from './Flows/index.mjs';
+import dotenv from 'dotenv'
 
-const Flows = require('./Flows')
+dotenv.config()
 
 const app = express()
 app.use(bodyParser.json());

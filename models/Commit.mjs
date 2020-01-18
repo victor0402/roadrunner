@@ -1,5 +1,5 @@
-const db = require('../db');
-const PullRequest = require('./PullRequest').default
+import db from '../db.mjs'
+import PullRequest from './PullRequest.mjs'
 
 const collectionName = 'commits';
 
@@ -49,4 +49,4 @@ class Commit {
   }
 };
 
-exports.default = Commit;
+export default Commit;

@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const SLACK_PUSHER_URL = process.env.SLACK_PUSHER_URL || 'https://hooks.zapier.com/hooks/catch/4254966/otwcxkc';
 
@@ -20,4 +20,7 @@ const sendMessage = ({
   axios.post(SLACK_PUSHER_URL, payload)
 };
 
-exports.sendMessage = sendMessage;
+
+export default {
+  sendMessage
+}

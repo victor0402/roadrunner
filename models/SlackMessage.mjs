@@ -1,4 +1,4 @@
-const db = require('../db');
+import db from '../db.mjs';
 
 const collectionName = 'slackMessages';
 
@@ -33,4 +33,4 @@ class SlackMessage {
   }
 };
 
-exports.default = SlackMessage;
+export default SlackMessage;

@@ -5,4 +5,6 @@ const parse = (json) => {
   }
 }
 
-exports.parse = parse
+export default {
+  parse
+}

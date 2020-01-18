@@ -1,7 +1,7 @@
-const Utils = require('../../Utils')
-const DB = require('../../db')
-const Slack = require('../../Slack')
-const SlackRepository = require('../../SlackRepository');
+import Utils from '../../Utils.mjs'
+import DB from '../../db.mjs'
+import Slack from '../../Slack.mjs'
+import SlackRepository from '../../SlackRepository.mjs'
 
 const getContent = (json) => (
   {
@@ -35,4 +35,6 @@ const start = async (json) => {
   })
 };
 
-exports.start = start;
+export default {
+  start,
+}

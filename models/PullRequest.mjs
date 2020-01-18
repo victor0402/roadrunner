@@ -1,7 +1,6 @@
-const ObjectId = require('mongodb').ObjectID
-const db = require('../db');
-
-const SlackMessage = require('./SlackMessage').default;
+import mongodb from 'mongodb';
+import db from '../db.mjs';
+import SlackMessage from './SlackMessage.mjs';
 
 const devToQATitle = 'development to qa'
 const QAToMasterTitle = 'qa to master'
@@ -56,12 +55,12 @@ class PullRequest {
     const collection = await db.getCollection(collectionName);
     const json = this.toJson();
     delete json.id
-    const objectID = new ObjectId(this.id)
+    const objectID = new mongodb.ObjectID(this.id)
     return await collection.updateOne({ _id: objectID }, { $set: json })
   }
 
   static async findById(id) {
-    const objectID = new ObjectId(id)
+    const objectID = new ObjectID(id)
     return await this.findBy({ _id: objectID })
   }
 
@@ -111,4 +110,4 @@ class PullRequest {
   }
 };
 
-exports.default = PullRequest;
+export default PullRequest;

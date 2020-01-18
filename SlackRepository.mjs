@@ -61,5 +61,7 @@ const repositoriesIdentifiers = {
 
 const getRepositoryData = (repositoryName) => repositoriesIdentifiers[repositoryName];
 
-exports.getRepositoryData = getRepositoryData;
-exports.data = repositoriesIdentifiers;
+export default {
+  getRepositoryData,
+  data: repositoriesIdentifiers
+}

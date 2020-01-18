@@ -1,7 +1,7 @@
-const Slack = require('../../Slack')
-const SlackRepository = require('../../SlackRepository');
-const PullRequest = require('../../models/PullRequest').default
-const pullRequestParser = require('../../parsers/pullRequestParser');
+import Slack from '../../Slack.mjs'
+import SlackRepository from '../../SlackRepository.mjs'
+import PullRequest from '../../models/PullRequest.mjs'
+import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 
 const getContent = (json) => (
   {
@@ -38,4 +38,6 @@ const start = async (json) => {
   }
 };
 
-exports.start = start;
+export default {
+  start
+}

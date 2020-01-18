@@ -1,7 +1,7 @@
-const Slack = require('../../Slack')
-const SlackRepository = require('../../SlackRepository');
-const GitHub = require('../../Github')
-const Commit = require('../../models/Commit').default
+import Slack from '../../Slack.mjs'
+import SlackRepository from '../../SlackRepository.mjs'
+import GitHub from '../../Github.mjs'
+import Commit from '../../models/Commit.mjs'
 
 const start = async (pr) => {
   console.log('send changelog flow', pr)
@@ -45,4 +45,6 @@ const start = async (pr) => {
   });
 };
 
-exports.start = start;
+export default {
+  start
+}
