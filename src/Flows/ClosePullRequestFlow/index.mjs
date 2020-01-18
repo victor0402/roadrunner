@@ -32,7 +32,6 @@ class ClosePullRequestFlow {
 
     await pr.update()
 
-    console.log('pr', pr)
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
     ghCommits.forEach(c => {
       const commit = new Commit(pr.id, c.sha, c.message);
