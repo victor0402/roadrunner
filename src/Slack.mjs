@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class Slack {
   static async sendMessage({ message, slackChannel, threadID, callbackIdentifier, callbackURL }) {
-    const ZAPIER_WEBHOOK_URL = process.env.ZAPIER_WEBHOOK_URL;
+    const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/4254966/otwcxkc';
 
     const payload = {
       message,
@@ -13,8 +13,7 @@ class Slack {
     }
 
     console.log(ZAPIER_WEBHOOK_URL, payload)
-    const response = await axios.post(ZAPIER_WEBHOOK_URL, payload)
-    console.log(response)
+    await axios.post(ZAPIER_WEBHOOK_URL, payload)
   };
 }
 
