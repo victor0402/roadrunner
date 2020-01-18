@@ -6,6 +6,7 @@ const octokit = new Octokit({
 
 class Github {
   static async getCommits (pullRequestId, owner, repository) {
+    console.log('getting commits', pullRequestId, owner, repository)
     const commits = await octokit.pulls.listCommits({
       owner,
       repo: repository,
