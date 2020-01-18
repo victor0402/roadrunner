@@ -42,8 +42,8 @@ class NewReviewSubmissionFlow {
         threadID: slackThreadTS
       })
     } else {
-      console.error('No slack message was set!')
-      console.error('Flow aborted!')
+      console.log('No slack message was set!')
+      console.log('Flow aborted!')
     }
   };
 
