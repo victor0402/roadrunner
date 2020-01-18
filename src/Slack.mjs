@@ -12,7 +12,6 @@ class Slack {
       callbackURL
     }
 
-    console.log(ZAPIER_WEBHOOK_URL, payload)
     await axios.post(ZAPIER_WEBHOOK_URL, payload)
   };
 }
