@@ -2,43 +2,56 @@ import Slack from '../../Slack.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import GitHub from '../../Github.mjs'
 import Commit from '../../models/Commit.mjs'
+import PullRequest from '../../models/PullRequest.mjs'
+import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 
-const start = async (pr) => {
-  const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
+class SendChangelogFlow {
+  static async start(json) {
+    const pr = await new PullRequest(pullRequestParser.parse(json)).load();
+    const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
 
-  const { deployChannel } = repositoryData;
-  if (!deployChannel) {
-    return;
-  }
+    const { deployChannel } = repositoryData;
 
-  const ghCommits = await GitHub.getCommits(pr.ghId, pr.owner, pr.repositoryName)
-  let commits = await Promise.all(ghCommits.map(async c => Commit.findBySha(c.sha)))
-  commits = commits.filter(c => c)
+    if (!deployChannel) {
+      return;
+    }
 
-  let pullRequests = (await Promise.all(commits.map(async commit => {
-    return await commit.getPullRequest();
-  }))).filter(p => p);
+    const ghCommits = await GitHub.getCommits(pr.ghId, pr.owner, pr.repositoryName)
+    let commits = await Promise.all(ghCommits.map(async c => Commit.findBySha(c.sha)))
+    commits = commits.filter(c => c)
 
-  // Remove duplicates
-  pullRequests = Object.values(pullRequests.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
+    let pullRequests = (await Promise.all(commits.map(async commit => {
+      return await commit.getPullRequest();
+    }))).filter(p => p);
 
-  if (pullRequests.length === 0) {
-    console.log("We couldn't find any pull requests on our database for this release", pr);
-    return;
-  }
+    // Remove duplicates
+    pullRequests = Object.values(pullRequests.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
 
-  let message = "*Experimental* Changelog:"
+    if (pullRequests.length === 0) {
+      console.log("We couldn't find any pull requests on our database for this release", pr);
+      return;
+    }
 
-  pullRequests.forEach(pr => {
-    message = message + `\n - ${pr.title}`
-  })
+    let message = "*Experimental* Changelog:"
 
-  Slack.sendMessage({
-    message,
-    slackChannel: deployChannel,
-  });
-};
+    pullRequests.forEach(pr => {
+      message = message + `\n - ${pr.title}`
+    })
 
-export default {
-  start
+    Slack.sendMessage({
+      message,
+      slackChannel: deployChannel,
+    });
+  };
+
+  static async isFlow(json) {
+    if (!json.action || json.action !== 'closed') {
+      return false;
+    };
+
+    const pr = await new PullRequest(pullRequestParser.parse(json)).load();
+    return pr.isDeployPR();
+  };
 }
+
+export default SendChangelogFlow;

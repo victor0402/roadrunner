@@ -3,18 +3,12 @@ import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
-import SendChangelogFlow from '../SendChangelogFlow/index.mjs'
+import Github from '../../Github.mjs';
+import Commit from '../../models/Commit.mjs';
 
 class ClosePullRequestFlow {
   static async start(json) {
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
-
-    //    if (!pr.id && pr.isClosed()) {
-    //      return;
-    //    } else if (pr.isDeployPR()) {
-    //      SendChangelogFlow.start(pr)
-    //      return;
-    //    }
 
     const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
     if (!mainSlackMessage) {
@@ -37,14 +31,21 @@ class ClosePullRequestFlow {
     pr.close()
 
     await pr.update()
+
+    const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
+    ghCommits.forEach(c => {
+      const commit = new Commit(pr.id, c.sha, c.message);
+      commit.create();
+    })
   };
 
   static async isFlow(json) {
     if (!json.action || json.action !== 'closed') {
       return false;
-    }
+    };
+
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
-    return pr && !pr.isClosed()
+    return pr && !pr.isClosed() && !pr.isDeployPR();
   };
 }
 

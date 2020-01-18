@@ -14,6 +14,7 @@ class Commit {
     this.pullRequest = await PullRequest.findById(this.prId)
     return this.pullRequest;
   }
+
   async create() {
     const collection = await db.getCollection(collectionName);
 

@@ -56,7 +56,7 @@ class PullRequest {
   }
 
   static async findById(id) {
-    const objectID = new ObjectID(id)
+    const objectID = new mongodb.ObjectID(id)
     return await this.findBy({ _id: objectID })
   }
 
