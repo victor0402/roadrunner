@@ -21,9 +21,7 @@ class NewPullRequestFlow {
       slackChannel: channel,
       branchName: pr.branchName,
       repositoryName: pr.repositoryName,
-
       callbackIdentifier: pr.id,
-
       callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
     });
   };

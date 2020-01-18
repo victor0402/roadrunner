@@ -10,34 +10,46 @@ const getContent = (json) => (
   }
 );
 
-const start = async (json) => {
-  const pr = await new PullRequest(pullRequestParser.parse(json)).load();
+class NewReviewSubmissionFlow {
+  static async start(json) {
+    const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
-  const content = getContent(json);
-  const { message, state } = content;
-  const slackMainMessage = await pr.getMainSlackMessage();
+    const content = getContent(json);
+    const { message, state } = content;
+    const mainSlackMessage = await pr.getMainSlackMessage();
 
-  const slackThreadTS = slackMainMessage.ts;
-  const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
-  const { channel } = repositoryData;
+    if (!mainSlackMessage) {
+      console.log('Flow aborted!')
+      return;
+    }
 
-  let slackMessage = null;
+    const slackThreadTS = mainSlackMessage.ts;
+    const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
+    const { channel } = repositoryData;
 
-  if (state === 'changes_requested') {
-    slackMessage = ":warning: changes requested!"
-  } else if (message !== '') {
-    slackMessage = ':speech_balloon: There is a new message!'
-  }
+    let slackMessage = null;
 
-  if (slackMessage) {
-    Slack.sendMessage({
-      message: slackMessage,
-      slackChannel: channel,
-      threadID: slackThreadTS
-    })
-  }
-};
+    if (state === 'changes_requested') {
+      slackMessage = ":warning: changes requested!"
+    } else if (message !== '') {
+      slackMessage = ':speech_balloon: There is a new message!'
+    }
 
-export default {
-  start
+    if (slackMessage) {
+      Slack.sendMessage({
+        message: slackMessage,
+        slackChannel: channel,
+        threadID: slackThreadTS
+      })
+    } else {
+      console.error('No slack message was set!')
+      console.error('Flow aborted!')
+    }
+  };
+
+  async isFlow(json) {
+    return json.action === 'submitted'
+  };
 }
+
+export default NewReviewSubmissionFlow;

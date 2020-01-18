@@ -9,15 +9,16 @@ class ClosePullRequestFlow {
   static async start(json) {
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
-//    if (!pr.id && pr.isClosed()) {
-//      return;
-//    } else if (pr.isDeployPR()) {
-//      SendChangelogFlow.start(pr)
-//      return;
-//    }
+    //    if (!pr.id && pr.isClosed()) {
+    //      return;
+    //    } else if (pr.isDeployPR()) {
+    //      SendChangelogFlow.start(pr)
+    //      return;
+    //    }
 
     const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
     if (!mainSlackMessage) {
+      console.log('Flow aborted!')
       return;
     }
 
@@ -39,8 +40,9 @@ class ClosePullRequestFlow {
   };
 
   static async isFlow(json) {
-    if (json.action === 'closed') { return false; }
-
+    if (!json.action || json.action !== 'closed') {
+      return false;
+    }
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
     return pr && !pr.isClosed()
   };

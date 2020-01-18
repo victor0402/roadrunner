@@ -12,6 +12,9 @@ import Flows from './Flows/index.mjs';
 
 import closePrJson from './payload-examples/closePR.json';
 import newFullPrJson from './payload-examples/newFullPR.json';
+import newChangeJson from './payload-examples/newPush.json';
+import submitReviewChangesApproved from './payload-examples/submitReviewChangesApproved.json';
+import submitReviewChangesRequested from './payload-examples/submitReviewChangesRequested.json';
 
 
 const app = express()
@@ -30,7 +33,10 @@ const processFlowRequest = async (req, res) => {
     return;
   }
 
-  Flow.start(json)
+  const flowName = Flow.name;
+  console.log(`Start: ${flowName}`)
+  await Flow.start(json)
+  console.log(`End: ${flowName}`)
 
   res.sendStatus(200)
 }
@@ -77,13 +83,6 @@ app.get('/test-new-full-pr', async (req, res) => {
   }, res)
 })
 
-app.get('/test-new-pr-comment', async (req, res) => {
-  const newPRJson = require('./payload-examples/newPRComment.json')
-  processFlowRequest({
-    body: newPRJson,
-  }, res)
-})
-
 app.get('/test-close-pr', async (req, res) => {
   processFlowRequest({
     body: closePrJson,
@@ -91,29 +90,20 @@ app.get('/test-close-pr', async (req, res) => {
 })
 
 app.get('/test-new-change', async (req, res) => {
-  const newPRJson = require('./payload-examples/newPush.json')
   processFlowRequest({
-    body: newPRJson,
+    body: newChangeJson,
   }, res)
 })
 
 app.get('/test-submit-review-changes-requested', async (req, res) => {
-  const newPRJson = require('./payload-examples/submitReviewChangesRequested.json')
   processFlowRequest({
-    body: newPRJson,
-  }, res)
-})
-app.get('/test-submit-review-changes-requested', async (req, res) => {
-  const newPRJson = require('./payload-examples/submitReviewChangesRequested.json')
-  processFlowRequest({
-    body: newPRJson,
+    body: submitReviewChangesRequested,
   }, res)
 })
 
 app.get('/test-submit-review-changes-approved', async (req, res) => {
-  const newPRJson = require('./payload-examples/submitReviewChangesApproved.json')
   processFlowRequest({
-    body: newPRJson,
+    body: submitReviewChangesApproved,
   }, res)
 })
 

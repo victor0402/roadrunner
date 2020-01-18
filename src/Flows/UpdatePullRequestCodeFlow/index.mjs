@@ -16,6 +16,10 @@ class UpdatePullRequestCodeFlow {
     const pr = await PullRequest.findBy(query)
 
     const mainSlackMessage = await pr.getMainSlackMessage();
+    if (!mainSlackMessage) {
+      console.log('Flow aborted!')
+      return;
+    }
 
     const slackThreadTS = mainSlackMessage.ts;
 
@@ -31,15 +35,21 @@ class UpdatePullRequestCodeFlow {
     })
   };
 
-  static isFlow(json) {
-    if (json.action !== 'opened' && json.action !== 'ready_for_review') {
-      return false;
+  static async isFlow(json) {
+    const content = pushChangeParser.parse(json);
+    const { repositoryName, branchName } = content;
+
+    if (branchName === 'master' || branchName === 'development' || branchName === 'develop') {
+      return;
     }
 
-    const data = pullRequestParser.parse(json);
-    const pr = new PullRequest(data)
+    const query = {
+      branchName: branchName,
+      repositoryName: repositoryName
+    }
 
-    return !pr.draft && !pr.isDeployPR()
+    const pr = await PullRequest.findBy(query)
+    return pr && !pr.isClosed();
   };
 }
 
