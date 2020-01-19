@@ -28,14 +28,23 @@ class ClosePullRequestFlow {
       threadID: mainSlackMessage.ts
     });
 
-    pr.close()
-
-    await pr.update()
+    await pr.close()
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
-    ghCommits.forEach(c => {
-      const commit = new Commit(pr.id, c.sha, c.message);
-      commit.create();
+
+    ghCommits.forEach(ghCommit => {
+      const { sha, commit } = ghCommit;
+      const { author, message } = commit;
+      const { date, email, name } = author;
+
+      new Commit({
+        prId: pr.id,
+        sha,
+        message,
+        createdAt: (new Date(date)).getTime(),
+        authorEmail: email,
+        authorName: name,
+      }).create();
     })
   };
 

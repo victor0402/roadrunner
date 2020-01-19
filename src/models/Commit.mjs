@@ -4,10 +4,13 @@ import PullRequest from './PullRequest.mjs'
 const collectionName = 'commits';
 
 class Commit {
-  constructor(prId, sha, message) {
-    this.prId = prId;
-    this.sha = sha;
-    this.message = message;
+  constructor(data) {
+    this.prId = data.prId;
+    this.sha = data.sha;
+    this.message = data.message;
+    this.createdAt = data.createdAt;
+    this.authorName = data.authorName;
+    this.authorEmail = data.authorEmail;
   }
 
   async getPullRequest() {
@@ -22,6 +25,9 @@ class Commit {
       prId: this.prId,
       sha: this.sha,
       message: this.message,
+      createdAt: this.createdAt,
+      authorName: this.authorName,
+      authorEmail: this.authorEmail
     });
 
     this.id = commit.ops[0]._id

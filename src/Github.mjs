@@ -1,11 +1,11 @@
 import Octokit from '@octokit/rest';
 
-const octokit = new Octokit({
-  auth: process.env.GIT_AUTH
-});
 
 class Github {
-  static async getCommits (pullRequestId, owner, repository) {
+  static async getCommits(pullRequestId, owner, repository) {
+    const octokit = new Octokit({
+      auth: process.env.GIT_AUTH
+    });
     const commits = await octokit.pulls.listCommits({
       owner,
       repo: repository,

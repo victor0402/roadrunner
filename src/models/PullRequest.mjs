@@ -15,8 +15,9 @@ class PullRequest {
     this.title = data.title;
     this.draft = data.draft;
     this.state = data.state;
-    this.closed = data.closed;
     this.owner = data.owner;
+    this.createdAt = data.createdAt;
+    this.closedAt = data.closedAt;
   }
 
   isDeployPR() {
@@ -24,7 +25,7 @@ class PullRequest {
   }
 
   isClosed() {
-    return !!this.closed;
+    return !!this.closedAt;
   }
 
   async getMainSlackMessage() {
@@ -34,15 +35,20 @@ class PullRequest {
 
   async create() {
     const collection = await db.getCollection(collectionName);
+    const json = this.toJson();
 
-    const pr = await collection.insertOne(this.toJson());
+    const pr = await collection.insertOne({
+      ...json,
+      createdAt: Date.now() 
+     });
+     console.log(pr.ops[0])
 
     this.id = pr.ops[0]._id.toString()
   }
 
   async close() {
-    this.closed = true;
-    return await this.update();
+    this.closedAt = Date.now();
+    await this.update();
   }
 
   async update() {
@@ -86,6 +92,8 @@ class PullRequest {
 
     if (pr) {
       this.id = pr._id.toString()
+      this.createdAt = pr.createdAt;
+      this.closedAt = pr.closedAt;
     }
     return this;
   }
@@ -93,13 +101,16 @@ class PullRequest {
   toJson() {
     return {
       branchName: this.branchName,
+      baseBranchName: this.baseBranchName,
       link: this.link,
       ghId: this.ghId,
       repositoryName: this.repositoryName,
       title: this.title,
       draft: this.draft,
       state: this.state,
-      closed: this.closed,
+      owner: this.owner,
+      createdAt: this.createdAt,
+      closedAt: this.closedAt
     }
   }
 };
