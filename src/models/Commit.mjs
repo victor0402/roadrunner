@@ -1,4 +1,4 @@
-import db from '../db.mjs'
+import db from '../Database.mjs'
 import PullRequest from './PullRequest.mjs'
 
 const collectionName = 'commits';

@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import db from '../db.mjs';
+import db from '../Database.mjs';
 import SlackMessage from './SlackMessage.mjs';
 
 const collectionName = 'pullRequests';

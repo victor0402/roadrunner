@@ -1,4 +1,4 @@
-import db from '../db.mjs';
+import db from '../Database.mjs';
 
 const collectionName = 'slackMessages';
 
