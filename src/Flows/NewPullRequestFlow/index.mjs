@@ -1,6 +1,8 @@
 import Slack from '../../Slack.mjs'
+import Github from '../../Github.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
+import Commit from '../../models/Commit.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 
 class NewPullRequestFlow {
@@ -24,6 +26,23 @@ class NewPullRequestFlow {
       callbackIdentifier: pr.id,
       callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
     });
+
+    const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
+
+    ghCommits.forEach(ghCommit => {
+      const { sha, commit } = ghCommit;
+      const { author, message } = commit;
+      const { date, email, name } = author;
+
+      new Commit({
+        prId: pr.id,
+        sha,
+        message,
+        createdAt: (new Date(date)).getTime(),
+        authorEmail: email,
+        authorName: name,
+      }).create();
+    })
   };
 
   static isFlow(json) {

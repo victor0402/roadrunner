@@ -46,7 +46,7 @@ class Commit {
       console.log(`Couldn't find commit with sha ${sha}`)
       return;
     }
-    return new Commit(result.prId, result.sha, result.message)
+    return new Commit(result)
   }
 
   static async findByPRId(prId) {

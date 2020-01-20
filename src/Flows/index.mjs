@@ -3,6 +3,7 @@ import ClosePullRequestFlow from './ClosePullRequestFlow/index.mjs'
 import UpdatePullRequestCodeFlow from './UpdatePullRequestCodeFlow/index.mjs'
 import NewReviewSubmissionFlow from './NewReviewSubmissionFlow/index.mjs'
 import SendChangelogFlow from './SendChangelogFlow/index.mjs';
+import CheckRunFlow from './CheckRunFlow/index.mjs';
 
 const getFlow = async (json) => {
   if (await NewPullRequestFlow.isFlow(json)) {
@@ -15,6 +16,8 @@ const getFlow = async (json) => {
     return UpdatePullRequestCodeFlow;
   } else if (await SendChangelogFlow.isFlow(json)) {
     return SendChangelogFlow;
+  } else if (await CheckRunFlow.isFlow(json)) {
+    return CheckRunFlow;
   }
 }
 

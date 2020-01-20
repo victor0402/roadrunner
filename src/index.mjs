@@ -9,7 +9,7 @@ import Github from './Github.mjs';
 import SlackMessage from './models/SlackMessage.mjs';
 import Flows from './Flows/index.mjs';
 
-
+import checkRunPendingJson from './payload-examples/checkRunPending.json';
 import closePrJson from './payload-examples/closePR.json';
 import newFullPrJson from './payload-examples/newFullPR.json';
 import newChangeJson from './payload-examples/newPush.json';
@@ -110,6 +110,12 @@ app.get('/test-submit-review-changes-approved', async (req, res) => {
   }, res)
 })
 
+app.get('/test-checkrun-pending', async (req, res) => {
+  processFlowRequest({
+    body: checkRunPendingJson,
+  }, res)
+})
+
 app.post('/slack-callback', (req, res) => {
   const json = req.body;
   const { callbackIdentifier, slackThreadTS } = json;
@@ -121,8 +127,14 @@ app.post('/slack-callback', (req, res) => {
 })
 
 app.get('/test-github/:prId', async (req, res) => {
-const prId = req.params.prId;
-const commit = await Github.getCommits(prId)
+  const prId = req.params.prId;
+  const commit = await Github.getCommits(prId)
+
+  res.send(commit)
+})
+
+app.get('/test-github-status', async (req, res) => {
+  const commit = await Github.getStatus('test-pr', 'codelittinc', 'codelitt-v2')
 
   res.send(commit)
 })

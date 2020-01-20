@@ -41,7 +41,6 @@ class PullRequest {
       ...json,
       createdAt: Date.now() 
      });
-     console.log(pr.ops[0])
 
     this.id = pr.ops[0]._id.toString()
   }
