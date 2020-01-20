@@ -58,7 +58,7 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 
   const filteredRepositories = repositoryNames.filter(k => SlackRepository.data[k].devGroup === `@${devGroup}`)
 
-  const prs = await PullRequest.list({ state: 'open', repositoryName: { $in: filteredRepositories }})
+  const prs = await PullRequest.list({ state: 'open', repositoryName: { $in: filteredRepositories } })
 
   res.send({
     status: 200,
@@ -68,7 +68,10 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 })
 
 app.get('/open-prs', async (req, res) => {
-  const prs = await PullRequest.list({ state: 'open' })
+  let prs = await PullRequest.list({ state: 'open' })
+  // Remove test repository
+  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
+
 
   res.send({
     status: 200,
