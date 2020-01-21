@@ -1,7 +1,7 @@
 const repositoriesIdentifiers = {
   'gh-hooks-repo-test': {
     devGroup: '@nicetag',
-    channel: 'gh-notifications',
+    channel: 'test-gh',
     deployChannel: 'test-gh-deploy'
   },
   'codelitt-v2': {

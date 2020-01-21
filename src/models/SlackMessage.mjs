@@ -16,6 +16,8 @@ class SlackMessage {
       ts: this.ts,
     });
 
+    console.log(`Creating Slack Message for ${this.prId} with ts ${this.ts}`);
+
     this.id = slackMessage.ops[0]._id
   }
 

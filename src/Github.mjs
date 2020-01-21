@@ -14,6 +14,21 @@ class Github {
 
     return commits.data;
   }
+
+  static async getStatus(ref, owner, repository) {
+    const octokit = new Octokit({
+      auth: process.env.GIT_AUTH
+    });
+
+    const status = await octokit.repos.listStatusesForRef({
+      owner,
+      repo: repository,
+      ref
+    })
+    console.log(status)
+
+    return status.data;
+  }
 }
 
 export default Github;

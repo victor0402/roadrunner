@@ -21,10 +21,7 @@ class NewPullRequestFlow {
     Slack.sendMessage({
       message,
       slackChannel: channel,
-      branchName: pr.branchName,
-      repositoryName: pr.repositoryName,
-      callbackIdentifier: pr.id,
-      callbackURL: 'http://gh-notifications.codelitt.dev/slack-callback'
+      prId: pr.id,
     });
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);

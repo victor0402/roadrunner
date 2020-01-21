@@ -7,6 +7,9 @@ class CheckRunFlow {
   static async start(json) {
     const { sha } = json;
     const commit = await Commit.findBySha(sha)
+    if (!commit) {
+      return
+    }
     const pr = await commit.getPullRequest();
 
     const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
@@ -26,12 +29,16 @@ class CheckRunFlow {
       slackChannel: channel,
       threadID: mainSlackMessage.ts
     });
+
+//    Slack.sendReaction({
+//      slackChannel: channel,
+//      reaction: 'red_circle',
+//      messageTs: mainSlackMessage.ts
+//    });
   };
 
   static async isFlow(json) {
-    console.log('cool flow', json.state)
-    return json.commit
-     && json.state === 'failure';
+    return json.commit && json.state === 'failure';
   };
 }
 
