@@ -18,7 +18,9 @@ class Slack {
     const res = await slackClient.chat.postMessage({
       channel: channel.id,
       text: message,
-      thread_ts: threadID 
+      thread_ts: threadID,
+      unfurl_links: false, 
+      parse: 'full'
     });
     
     if (prId) {

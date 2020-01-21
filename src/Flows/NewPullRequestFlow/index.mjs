@@ -16,7 +16,7 @@ class NewPullRequestFlow {
 
     await pr.create()
 
-    const message = `<${devGroup}> :point_right:  please review this new PR: ${pr.link}`;
+    const message = `${devGroup} :point_right:  please review this new PR: ${pr.link}`;
 
     Slack.sendMessage({
       message,
