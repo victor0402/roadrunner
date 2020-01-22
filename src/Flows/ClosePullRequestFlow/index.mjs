@@ -46,6 +46,17 @@ class ClosePullRequestFlow {
         authorName: name,
       }).create();
     })
+
+
+    const reactionsToRemove = ['white_check_mark', 'rotating_light', 'hourglass']
+    let reactionToAdd = 'merge2';
+
+    Slack.toggleReaction({
+      slackChannel: channel,
+      reactionToAdd,
+      reactionsToRemove,
+      messageTs: mainSlackMessage.ts
+    });
   };
 
   static async isFlow(json) {

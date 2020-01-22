@@ -63,7 +63,7 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({ state: pr.state, link: pr.link, title: pr.title })),
+    data: prs.map(pr => ({ state: pr.state, link: pr.link, title: pr.title, ci_state: pr.ciState })),
   })
 })
 
@@ -76,7 +76,7 @@ app.get('/open-prs', async (req, res) => {
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({ state: pr.state, link: pr.link }))
+    data: prs.map(pr => ({ state: pr.state, link: pr.link, ci_state: pr.ciState }))
   })
 })
 

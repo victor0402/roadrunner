@@ -101,6 +101,11 @@ class PullRequest {
     return this;
   }
 
+  async updateCIState(state) {
+    this.ciState = state;
+    await this.update()
+  }
+
   toJson() {
     return {
       branchName: this.branchName,

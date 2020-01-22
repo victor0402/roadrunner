@@ -5,7 +5,7 @@ import Commit from '../../models/Commit.mjs';
 
 class CheckRunFlow {
   static async start(json) {
-    const { sha } = json;
+    const { sha, state } = json;
     const commit = await Commit.findBySha(sha)
     if (!commit) {
       return
@@ -22,23 +22,41 @@ class CheckRunFlow {
 
     const { channel } = repositoryData;
 
-    const message = ":rotating_light: CI Failed!"
+    let message;
+    let reactji;
 
-    Slack.sendMessage({
-      message,
+    if (state === 'success') {
+      reactji = 'white_check_mark'
+    } else {
+      message = ":rotating_light: CI Failed!"
+      reactji = 'rotating_light'
+    }
+
+    if (message) {
+      Slack.sendMessage({
+        message,
+        slackChannel: channel,
+        threadID: mainSlackMessage.ts
+      });
+    }
+
+    pr.updateCIState(state)
+
+    const possibleReactions = ['white_check_mark', 'rotating_light', 'hourglass']
+    let reactionToAdd = reactji;
+    let reactionsToRemove = possibleReactions.filter(r => r !== reactionToAdd);
+
+
+    Slack.toggleReaction({
       slackChannel: channel,
-      threadID: mainSlackMessage.ts
+      reactionToAdd: reactji,
+      reactionsToRemove,
+      messageTs: mainSlackMessage.ts
     });
-
-//    Slack.sendReaction({
-//      slackChannel: channel,
-//      reaction: 'red_circle',
-//      messageTs: mainSlackMessage.ts
-//    });
   };
 
   static async isFlow(json) {
-    return json.commit && json.state === 'failure';
+    return json.commit && (json.state === 'success' || json.state === 'failure');
   };
 }
 

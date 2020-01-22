@@ -8,7 +8,7 @@ class Slack {
     const slackClient = new SlackApi.WebClient(token);
 
     const response = await slackClient.channels.list({
-      limit: 500 
+      limit: 500
     });
 
     let channels = response.channels.sort((a, b) => a.created < b.created)
@@ -18,10 +18,10 @@ class Slack {
       channel: channel.id,
       text: message,
       thread_ts: threadID,
-      unfurl_links: false, 
+      unfurl_links: false,
       parse: 'full'
     });
-    
+
     if (prId) {
       const slackMessage = new SlackMessage(prId, res.ts)
       slackMessage.create()
@@ -29,10 +29,6 @@ class Slack {
 
     return res.ts;
   };
-  /// 
-
-  // 1. Test the new send message class on all the flows
-  // 2. Add the sendReaction to the check runs pending/failure/approved
   // 3. Send a private message to the person who failed the PR
   // 4. Only send messages after CI has passed
   // 5. Update the git flow
@@ -42,7 +38,7 @@ class Slack {
     const slackClient = new SlackApi.WebClient(token);
 
     const response = await slackClient.channels.list({
-      limit: 500 
+      limit: 500
     });
 
     let channels = response.channels.sort((a, b) => a.created < b.created)
@@ -54,10 +50,46 @@ class Slack {
       timestamp: messageTs
     };
 
-    const msg = await slackClient.reactions.add(t);
-    console.log(msg);
+    await slackClient.reactions.add(t);
   };
 
+  static async toggleReaction({ slackChannel, reactionToAdd, messageTs, reactionsToRemove }) {
+    reactionsToRemove.forEach(reaction => {
+      Slack.removeReaction({
+        slackChannel,
+        reaction,
+        messageTs
+      })
+    });
+
+    Slack.sendReaction({
+      slackChannel,
+      reaction: reactionToAdd,
+      messageTs
+    })
+  };
+
+  static async removeReaction({ slackChannel, reaction, messageTs }) {
+    const token = process.env.SLACK_API_KEY;
+    const slackClient = new SlackApi.WebClient(token);
+
+    const response = await slackClient.channels.list({
+      limit: 500
+    });
+
+    let channels = response.channels.sort((a, b) => a.created < b.created)
+    const channel = channels.find(c => c.name === slackChannel)
+
+    const t = {
+      channel: channel.id,
+      name: reaction,
+      timestamp: messageTs
+    };
+
+    try {
+      await slackClient.reactions.remove(t);
+    } catch (err) { }
+  };
 }
 
 export default Slack;
