@@ -2,6 +2,28 @@ import SlackMessage from './models/SlackMessage.mjs'
 import SlackApi from '@slack/web-api';
 
 class Slack {
+  static async sendDirectMessage({ message, slackUsername }) {
+    const token = process.env.SLACK_API_KEY;
+
+    const slackClient = new SlackApi.WebClient(token);
+
+    const usersList = await slackClient.users.list({
+      limit:  1000
+    });
+    const members = usersList.members
+
+    const user = members.find(s => s.name === slackUsername)
+
+    const res = await slackClient.chat.postMessage({
+      channel: user.id,
+      text: message,
+      unfurl_links: false,
+      parse: 'full',
+      as_user: true
+    });
+
+    return res.ts;
+  };
   static async sendMessage({ message, slackChannel, prId, threadID }) {
     const token = process.env.SLACK_API_KEY;
 

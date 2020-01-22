@@ -19,6 +19,7 @@ class PullRequest {
     this.createdAt = data.createdAt;
     this.closedAt = data.closedAt;
     this.ciState = data.ciState;
+    this.username = data.username;
   }
 
   isDeployPR() {
@@ -119,7 +120,8 @@ class PullRequest {
       owner: this.owner,
       createdAt: this.createdAt,
       closedAt: this.closedAt,
-      ciState: this.ciState
+      ciState: this.ciState,
+      username: this.username
     }
   }
 };

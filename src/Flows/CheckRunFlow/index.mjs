@@ -28,15 +28,14 @@ class CheckRunFlow {
     if (state === 'success') {
       reactji = 'white_check_mark'
     } else {
-      message = ":rotating_light: CI Failed!"
+      message = `:rotating_light: CI Failed for PR: ${pr.link}`
       reactji = 'rotating_light'
     }
 
     if (message) {
-      Slack.sendMessage({
+      Slack.sendDirectMessage({
         message,
-        slackChannel: channel,
-        threadID: mainSlackMessage.ts
+        slackUsername: SlackRepository.getSlackUser(pr.username),
       });
     }
 

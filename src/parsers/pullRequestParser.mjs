@@ -9,6 +9,7 @@ const parse = (json) => {
     draft: json.pull_request.draft,
     state: json.pull_request.state,
     owner: json.pull_request.head.repo.owner.login,
+    username: json.pull_request.user.login,
   }
 } 
 

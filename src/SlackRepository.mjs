@@ -56,12 +56,28 @@ const repositoriesIdentifiers = {
     devGroup: '@team-maker-devs',
     channel: 'team-teammaker-dev'
   },
+}
 
+const ghToSlackUsers = {
+  kaiomagalhaes: 'kaiomagalhaes',
+  alesmit: 'alex',
+  alessandromontividiu03: 'alessandro.alves',
+  diogoribeiro: 'diogo',
+  gabrielpanga: 'gabriel',
+  lua121: 'lua',
+  neonima: 'vinny',
+  paulohfev: 'paulo',
+  presnizky: 'pablo',
+  raphaelsattler: 'raphael.sattler',
+  tolastarras: 'rafael.sobrino',
+  victor0402: 'victor.carvalho'
 }
 
 const getRepositoryData = (repositoryName) => repositoriesIdentifiers[repositoryName];
+const getSlackUser = (ghUser) => ghToSlackUsers[ghUser.toLowerCase()]
 
 export default {
   getRepositoryData,
-  data: repositoriesIdentifiers
+  data: repositoriesIdentifiers,
+  getSlackUser
 }
