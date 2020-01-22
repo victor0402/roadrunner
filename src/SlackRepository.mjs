@@ -54,7 +54,8 @@ const repositoriesIdentifiers = {
   },
   'team-maker': {
     devGroup: '@team-maker-devs',
-    channel: 'team-teammaker-dev'
+    channel: 'team-teammaker-dev',
+    deployChannel: 'team-teammaker-deploy'
   },
 }
 
@@ -66,7 +67,7 @@ const ghToSlackUsers = {
   gabrielpanga: 'gabriel',
   lua121: 'lua',
   neonima: 'vinny',
-  paulohfev: 'paulo',
+  paulohfev: 'paulo.fernandes',
   presnizky: 'pablo',
   raphaelsattler: 'raphael.sattler',
   tolastarras: 'rafael.sobrino',
