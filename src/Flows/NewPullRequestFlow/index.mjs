@@ -18,10 +18,16 @@ class NewPullRequestFlow {
 
     const message = `${devGroup} :point_right:  please review this new PR: ${pr.link}`;
 
-    Slack.sendMessage({
+    const ts = await Slack.sendMessage({
       message,
       slackChannel: channel,
       prId: pr.id,
+    });
+
+    Slack.sendReaction({
+      slackChannel: channel,
+      reaction: 'hourglass',
+      messageTs: ts
     });
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);

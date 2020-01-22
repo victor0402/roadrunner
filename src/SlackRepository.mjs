@@ -1,6 +1,6 @@
 const repositoriesIdentifiers = {
   'gh-hooks-repo-test': {
-    devGroup: '@nicetag',
+    devGroup: '@elbigode',
     channel: 'test-gh',
     deployChannel: 'test-gh-deploy'
   },

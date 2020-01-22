@@ -18,6 +18,7 @@ class PullRequest {
     this.owner = data.owner;
     this.createdAt = data.createdAt;
     this.closedAt = data.closedAt;
+    this.ciState = data.ciState;
   }
 
   isDeployPR() {
@@ -35,14 +36,17 @@ class PullRequest {
 
   async create() {
     const collection = await db.getCollection(collectionName);
+    this.createdAt = Date.now();
+    this.ciState = 'pending';
+
     const json = this.toJson();
 
     const pr = await collection.insertOne({
       ...json,
-      createdAt: Date.now() 
      });
 
     this.id = pr.ops[0]._id.toString()
+    return this;
   }
 
   async close() {
@@ -109,7 +113,8 @@ class PullRequest {
       state: this.state,
       owner: this.owner,
       createdAt: this.createdAt,
-      closedAt: this.closedAt
+      closedAt: this.closedAt,
+      ciState: this.ciState
     }
   }
 };

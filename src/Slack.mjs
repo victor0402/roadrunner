@@ -4,7 +4,6 @@ import SlackApi from '@slack/web-api';
 class Slack {
   static async sendMessage({ message, slackChannel, prId, threadID }) {
     const token = process.env.SLACK_API_KEY;
-    console.log('TOken', token)
 
     const slackClient = new SlackApi.WebClient(token);
 
@@ -27,6 +26,8 @@ class Slack {
       const slackMessage = new SlackMessage(prId, res.ts)
       slackMessage.create()
     }
+
+    return res.ts;
   };
   /// 
 
