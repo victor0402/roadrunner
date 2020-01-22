@@ -20,14 +20,6 @@ class ClosePullRequestFlow {
 
     const { channel } = repositoryData;
 
-    const message = "This PR is closed :merged:"
-
-    Slack.sendMessage({
-      message,
-      slackChannel: channel,
-      threadID: mainSlackMessage.ts
-    });
-
     await pr.close()
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
