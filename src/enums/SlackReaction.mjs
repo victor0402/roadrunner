@@ -32,7 +32,7 @@ class SlackReaction {
   }
 
   static listSimpleRemoving(reactionToRemove) {
-    return this.listSimple.filter(r => r !== reactionToRemove);
+    return this.listSimple().filter(r => r !== reactionToRemove);
   }
 }
 

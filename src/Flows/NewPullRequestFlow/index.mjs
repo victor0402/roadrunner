@@ -5,6 +5,7 @@ import PullRequest from '../../models/PullRequest.mjs'
 import Commit from '../../models/Commit.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 import SlackReaction from '../../enums/SlackReaction.mjs';
+import CheckRun from '../../models/CheckRun.mjs';
 
 class NewPullRequestFlow {
   static async start(json) {
@@ -25,12 +26,6 @@ class NewPullRequestFlow {
       prId: pr.id,
     });
 
-    Slack.sendReaction({
-      slackChannel: channel,
-      reaction: SlackReaction.hourglass.simple(),
-      messageTs: ts
-    });
-
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
 
     ghCommits.forEach(ghCommit => {
@@ -46,7 +41,29 @@ class NewPullRequestFlow {
         authorEmail: email,
         authorName: name,
       }).create();
-    })
+    });
+
+    const commitsShas = ghCommits.map(c => c.sha);
+    const lastCheckRun = await CheckRun.findLastStateForCommits(commitsShas);
+    let reaction;
+    if (lastCheckRun && lastCheckRun.state === 'success') {
+      reaction = SlackReaction.white_check_mark.simple();
+    } else if (lastCheckRun && lastCheckRun.state === 'failure') {
+      reaction = SlackReaction.rotating_light.simple();
+    } else {
+      reaction = SlackReaction.hourglass.simple();
+    }
+
+    Slack.sendReaction({
+      slackChannel: channel,
+      reaction: reaction,
+      messageTs: ts
+    });
+
+    if (lastCheckRun) {
+      pr.updateCIState(lastCheckRun.state)
+    }
+
   };
 
   static isFlow(json) {

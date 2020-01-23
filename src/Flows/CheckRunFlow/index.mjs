@@ -9,7 +9,7 @@ class CheckRunFlow {
   static async start(json) {
     const { sha, state } = json;
 
-    new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
+    const a = await new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
 
     const commit = await Commit.findBySha(sha)
     if (!commit || state === 'pending') {
@@ -49,7 +49,6 @@ class CheckRunFlow {
     Slack.toggleReaction({
       slackChannel: channel,
       reactionToAdd,
-      reactionsToRemove,
       messageTs: mainSlackMessage.ts
     });
   };
