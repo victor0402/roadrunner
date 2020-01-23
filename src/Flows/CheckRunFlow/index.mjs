@@ -2,13 +2,17 @@ import Slack from '../../Slack.mjs';
 import SlackRepository from '../../SlackRepository.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
 import Commit from '../../models/Commit.mjs';
+import CheckRun from '../../models/CheckRun.mjs';
 import SlackReaction from '../../enums/SlackReaction.mjs';
 
 class CheckRunFlow {
   static async start(json) {
     const { sha, state } = json;
+
+    new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
+
     const commit = await Commit.findBySha(sha)
-    if (!commit) {
+    if (!commit || state === 'pending') {
       return
     }
     const pr = await commit.getPullRequest();
@@ -51,7 +55,7 @@ class CheckRunFlow {
   };
 
   static async isFlow(json) {
-    return json.commit && (json.state === 'success' || json.state === 'failure');
+    return json.commit && (json.state === 'success' || json.state === 'failure' || json.state === 'pending');
   };
 }
 
