@@ -25,9 +25,9 @@ class SlackReaction {
       this.white_check_mark.simple(),
       this.hourglass.simple(),
       this.merge.simple(),
-      this.warning,
-      this.speech_balloon,
-      this.pencil
+      this.warning.simple(),
+      this.speech_balloon.simple(),
+      this.pencil.simple()
     ]
   }
 
