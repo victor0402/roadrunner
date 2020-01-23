@@ -23,7 +23,7 @@ class PullRequest {
   }
 
   isDeployPR() {
-    return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && this.branchName === 'develop'
+    return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && (this.branchName === 'develop' || this.branchName === 'qa')
   }
 
   isClosed() {
