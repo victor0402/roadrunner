@@ -1,5 +1,6 @@
 import SlackMessage from './models/SlackMessage.mjs'
 import SlackApi from '@slack/web-api';
+import SlackReaction from './enums/SlackReaction.mjs';
 
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {
@@ -75,7 +76,8 @@ class Slack {
     await slackClient.reactions.add(t);
   };
 
-  static async toggleReaction({ slackChannel, reactionToAdd, messageTs, reactionsToRemove }) {
+  static async toggleReaction({ slackChannel, reactionToAdd, messageTs }) {
+    const reactionsToRemove = SlackReaction.listSimpleRemoving(reactionToAdd)
     reactionsToRemove.forEach(reaction => {
       Slack.removeReaction({
         slackChannel,

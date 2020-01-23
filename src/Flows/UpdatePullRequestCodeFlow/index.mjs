@@ -2,6 +2,7 @@ import Slack from '../../Slack.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import pushChangeParser from '../../parsers/pushChangeParser.mjs'
+import SlackReaction from '../../enums/SlackReaction.mjs';
 
 class UpdatePullRequestCodeFlow {
   static async start(json) {
@@ -26,7 +27,7 @@ class UpdatePullRequestCodeFlow {
     const repositoryData = SlackRepository.getRepositoryData(repositoryName)
     const { channel } = repositoryData;
 
-    const message = ":pencil2: There is a new change!"
+    const message = `${SlackReaction.pencil.simple()} There is a new change!`
 
     Slack.sendMessage({
       message,

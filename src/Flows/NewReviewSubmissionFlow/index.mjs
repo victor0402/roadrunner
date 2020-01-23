@@ -2,6 +2,7 @@ import Slack from '../../Slack.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
+import SlackReaction from '../../enums/SlackReaction.mjs';
 
 const getContent = (json) => (
   {
@@ -30,9 +31,9 @@ class NewReviewSubmissionFlow {
     let slackMessage = null;
 
     if (state === 'changes_requested') {
-      slackMessage = ":warning: changes requested!"
+      slackMessage = `${SlackReaction.warning.simple()} changes requested!`
     } else if (message !== '') {
-      slackMessage = ':speech_balloon: There is a new message!'
+      slackMessage = `${SlackReaction.speech_balloon.simple()} There is a new message!`
     }
 
     if (slackMessage) {

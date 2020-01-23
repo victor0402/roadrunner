@@ -5,6 +5,7 @@ import SlackMessage from '../../models/SlackMessage.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 import Github from '../../Github.mjs';
 import Commit from '../../models/Commit.mjs';
+import SlackReaction from '../../enums/SlackReaction.mjs';
 
 class ClosePullRequestFlow {
   static async start(json) {
@@ -39,13 +40,9 @@ class ClosePullRequestFlow {
       }).create();
     })
 
-
-    const reactionsToRemove = ['white_check_mark', 'rotating_light', 'hourglass']
-    let reactionToAdd = 'merge2';
-
     Slack.toggleReaction({
       slackChannel: channel,
-      reactionToAdd,
+      reactionToAdd: SlackReaction.merge.simple(),
       reactionsToRemove,
       messageTs: mainSlackMessage.ts
     });

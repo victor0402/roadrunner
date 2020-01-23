@@ -4,6 +4,7 @@ import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import Commit from '../../models/Commit.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
+import SlackReaction from '../../enums/SlackReaction.mjs';
 
 class NewPullRequestFlow {
   static async start(json) {
@@ -26,7 +27,7 @@ class NewPullRequestFlow {
 
     Slack.sendReaction({
       slackChannel: channel,
-      reaction: 'hourglass',
+      reaction: SlackReaction.hourglass.simple(),
       messageTs: ts
     });
 

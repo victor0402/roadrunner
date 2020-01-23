@@ -28,7 +28,6 @@ const processFlowRequest = async (req, res) => {
   const Flow = await Flows.getFlow(json)
 
   if (!Flow) {
-    console.log("No flow found!")
     res.sendStatus(200)
     return;
   }

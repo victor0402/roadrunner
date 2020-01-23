@@ -2,6 +2,7 @@ import Slack from '../../Slack.mjs';
 import SlackRepository from '../../SlackRepository.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
 import Commit from '../../models/Commit.mjs';
+import SlackReaction from '../../enums/SlackReaction.mjs';
 
 class CheckRunFlow {
   static async start(json) {
@@ -23,13 +24,13 @@ class CheckRunFlow {
     const { channel } = repositoryData;
 
     let message;
-    let reactji;
+    let reactionToAdd;
 
     if (state === 'success') {
-      reactji = 'white_check_mark'
+      reactionToAdd = SlackReaction.white_check_mark.simple()
     } else {
-      message = `:rotating_light: CI Failed for PR: ${pr.link}`
-      reactji = 'rotating_light'
+      message = `${SlackReaction.rotating_light.forMessage()} CI Failed for PR: ${pr.link}`
+      reactionToAdd = SlackReaction.rotating_light.simple()
     }
 
     if (message) {
@@ -41,14 +42,9 @@ class CheckRunFlow {
 
     pr.updateCIState(state)
 
-    const possibleReactions = ['white_check_mark', 'rotating_light', 'hourglass']
-    let reactionToAdd = reactji;
-    let reactionsToRemove = possibleReactions.filter(r => r !== reactionToAdd);
-
-
     Slack.toggleReaction({
       slackChannel: channel,
-      reactionToAdd: reactji,
+      reactionToAdd,
       reactionsToRemove,
       messageTs: mainSlackMessage.ts
     });
