@@ -16,7 +16,7 @@ class SlackReaction {
   }
 
   forMessage() {
-    return `:${this.name}`
+    return `:${this.name}:`
   }
 
   static listSimple() {
