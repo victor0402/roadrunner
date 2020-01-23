@@ -27,7 +27,7 @@ class UpdatePullRequestCodeFlow {
     const repositoryData = SlackRepository.getRepositoryData(repositoryName)
     const { channel } = repositoryData;
 
-    const message = `${SlackReaction.pencil.simple()} There is a new change!`
+    const message = `${SlackReaction.pencil.forMessage()} There is a new change!`
 
     Slack.sendMessage({
       message,
