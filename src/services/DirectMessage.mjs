@@ -7,7 +7,7 @@ class DirectMessage {
     this.ghUsername = ghUsername;
   }
 
-  async notifyCIFailure() {
+  async notifyCIFailure(pr) {
     const message = `${SlackReaction.rotating_light.forMessage()} CI Failed for PR: ${pr.link}`
     return await this.send(message)
   }

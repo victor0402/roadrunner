@@ -37,7 +37,7 @@ class CheckRunFlow {
 
     if (state === 'failure') {
       const directMessage = new DirectMessage(pr.username)
-      directMessage.notifyCIFailure()
+      directMessage.notifyCIFailure(pr)
     }
 
     pr.updateCIState(state)
