@@ -1,5 +1,6 @@
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
+import ChannelMessage from '../../services/ChannelMessage.mjs'
 import pushChangeParser from '../../parsers/pushChangeParser.mjs'
 
 class UpdatePullRequestCodeFlow {
