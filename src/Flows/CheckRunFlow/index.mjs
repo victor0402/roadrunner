@@ -9,12 +9,17 @@ class CheckRunFlow {
   static async start(json) {
     const { sha, state } = json;
 
-    await new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
+    const currentCheckrun = await new CheckRun({ commitSha: sha, state })
+    console.log('current', currentCheckrun)
+    const newCheckRun = currentCheckrun.createOrLoadByCommitSha();
+    console.log('new checkrun', newCheckRun)
+
 
     const commit = await Commit.findBySha(sha)
     if (!commit || state === 'pending') {
       return
     }
+
     const pr = await commit.getPullRequest();
 
     const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
