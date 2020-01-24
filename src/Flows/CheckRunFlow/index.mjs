@@ -1,5 +1,6 @@
 import SlackRepository from '../../SlackRepository.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
+import PullRequest from '../../models/PullRequest.mjs'
 import Commit from '../../models/Commit.mjs';
 import CheckRun from '../../models/CheckRun.mjs';
 import Reactji from '../../services/Reactji.mjs';
@@ -7,17 +8,21 @@ import DirectMessage from '../../services/DirectMessage.mjs';
 
 class CheckRunFlow {
   static async start(json) {
-    const { sha, state } = json;
+    const { sha, state, branches, repository } = json;
+    const branchName = branches[0].name;
+    const repositoryName = repository.name;
 
     const currentCheckrun = await new CheckRun({ commitSha: sha, state })
     await currentCheckrun.createOrLoadByCommitSha();
 
-    const commit = await Commit.findBySha(sha)
-    if (!commit) {
-      return
-    }
+    // Add sort by to get the latest
+    const pr = await PullRequest.findBy({ branchName, repositoryName, state: 'open' });
 
-    const pr = await commit.getPullRequest();
+    if (!pr) {
+      console.log('No PR found');
+      console.log('Flow aborted!')
+      return;
+    }
 
     const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
     if (!mainSlackMessage) {
