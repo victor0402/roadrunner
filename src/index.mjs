@@ -52,6 +52,25 @@ app.get('/', async (req, res) => {
   })
 })
 
+const getPullRequestsJSON = async (prs) => {
+  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
+  //  prs = prs.filter(pr => pr.id === '5e2a59210b72038460276690')
+  await Promise.all(prs.map(pr => {
+    return pr.getReviews();
+  }))
+  return prs.map(pr => {
+    const approvedReviews = pr.reviews.filter(r => r.state === 'approved')
+    const reprovedReviews = pr.reviews.filter(r => r.state === 'changes_requested')
+
+    return {
+      title: pr.title,
+      link: pr.link,
+      ci_state: pr.ciState,
+      approved_by: approvedReviews.map(r => r.username),
+      reproved_by: reprovedReviews.map(r => r.username),
+    }
+  })
+}
 app.get(`/open-prs/:devGroup`, async (req, res) => {
   const devGroup = req.params.devGroup;
   const repositoryNames = Object.keys(SlackRepository.data);
@@ -63,35 +82,17 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({ state: pr.state, link: pr.link, title: pr.title, ci_state: pr.ciState })),
+    data: await getPullRequestsJSON(prs),
   })
 })
 
 app.get('/open-prs', async (req, res) => {
   let prs = await PullRequest.list({ state: 'open' })
-  // Remove test repository
-    prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
-//  prs = prs.filter(pr => pr.id === '5e2a59210b72038460276690')
-  await Promise.all(prs.map(pr => {
-    return pr.getReviews();
-  }))
 
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => {
-      const reviews = pr.reviews;
-      const approvedReviews = pr.reviews.filter(r => r.state === 'approved')
-      const reprovedReviews = pr.reviews.filter(r => r.state === 'changes_requested')
-
-      return {
-        state: pr.state,
-        link: pr.link,
-        ci_state: pr.ciState,
-        approved_by: approvedReviews.map(r => r.username),
-        reproved_by: reprovedReviews.map(r => r.username),
-      }
-    })
+    data: await getPullRequestsJSON(prs),
   })
 })
 
