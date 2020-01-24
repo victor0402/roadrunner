@@ -79,20 +79,23 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 
   const prs = await PullRequest.list({ state: 'open', repositoryName: { $in: filteredRepositories } })
 
+  const data = await getPullRequestsJSON(prs);
+
   res.send({
     status: 200,
-    length: prs.length,
-    data: await getPullRequestsJSON(prs),
+    length: data.length,
+    data,
   })
 })
 
 app.get('/open-prs', async (req, res) => {
   let prs = await PullRequest.list({ state: 'open' })
+  const data = await getPullRequestsJSON(prs);
 
   res.send({
     status: 200,
-    length: prs.length,
-    data: await getPullRequestsJSON(prs),
+    length: data.length,
+    data,
   })
 })
 
