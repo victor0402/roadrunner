@@ -4,12 +4,13 @@ import SlackMessage from '../../models/SlackMessage.mjs'
 import Commit from '../../models/Commit.mjs';
 import CheckRun from '../../models/CheckRun.mjs';
 import SlackReaction from '../../enums/SlackReaction.mjs';
+import Reactji from '../../services/Reactji.mjs';
 
 class CheckRunFlow {
   static async start(json) {
     const { sha, state } = json;
 
-    const a = await new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
+    await new CheckRun({ commitSha: sha, state }).createOrLoadByCommitSha();
 
     const commit = await Commit.findBySha(sha)
     if (!commit || state === 'pending') {
@@ -28,16 +29,9 @@ class CheckRunFlow {
     const { channel } = repositoryData;
 
     let message;
-    let reactionToAdd;
 
-    if (state === 'success') {
-      reactionToAdd = SlackReaction.white_check_mark.simple()
-    } else {
+    if (state === 'failure') {
       message = `${SlackReaction.rotating_light.forMessage()} CI Failed for PR: ${pr.link}`
-      reactionToAdd = SlackReaction.rotating_light.simple()
-    }
-
-    if (message) {
       Slack.sendDirectMessage({
         message,
         slackUsername: SlackRepository.getSlackUser(pr.username),
@@ -46,11 +40,8 @@ class CheckRunFlow {
 
     pr.updateCIState(state)
 
-    Slack.toggleReaction({
-      slackChannel: channel,
-      reactionToAdd,
-      messageTs: mainSlackMessage.ts
-    });
+    const reactji = new Reactji(mainSlackMessage.ts, state, channel)
+    reactji.react(true)
   };
 
   static async isFlow(json) {

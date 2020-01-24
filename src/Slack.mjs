@@ -76,7 +76,7 @@ class Slack {
     await slackClient.reactions.add(t);
   };
 
-  static async toggleReaction({ slackChannel, reactionToAdd, messageTs }) {
+  static async toggleReaction({ slackChannel, reaction, messageTs }) {
     const reactionsToRemove = SlackReaction.listSimpleRemoving(reactionToAdd)
     reactionsToRemove.forEach(reaction => {
       Slack.removeReaction({
@@ -88,7 +88,7 @@ class Slack {
 
     Slack.sendReaction({
       slackChannel,
-      reaction: reactionToAdd,
+      reaction,
       messageTs
     })
   };

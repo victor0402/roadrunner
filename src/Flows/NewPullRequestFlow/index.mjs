@@ -6,6 +6,7 @@ import Commit from '../../models/Commit.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 import SlackReaction from '../../enums/SlackReaction.mjs';
 import CheckRun from '../../models/CheckRun.mjs';
+import Reactji from '../../services/Reactji.mjs';
 
 class NewPullRequestFlow {
   static async start(json) {
@@ -45,25 +46,13 @@ class NewPullRequestFlow {
 
     const commitsShas = ghCommits.map(c => c.sha);
     const lastCheckRun = await CheckRun.findLastStateForCommits(commitsShas);
-    let reaction;
-    if (lastCheckRun && lastCheckRun.state === 'success') {
-      reaction = SlackReaction.white_check_mark.simple();
-    } else if (lastCheckRun && lastCheckRun.state === 'failure') {
-      reaction = SlackReaction.rotating_light.simple();
-    } else {
-      reaction = SlackReaction.hourglass.simple();
-    }
+    const reactji = new Reactji(ts, lastCheckRun.state, channel, 'ci', 'pending')
 
-    Slack.sendReaction({
-      slackChannel: channel,
-      reaction: reaction,
-      messageTs: ts
-    });
+    reactji.react()
 
     if (lastCheckRun) {
       pr.updateCIState(lastCheckRun.state)
     }
-
   };
 
   static isFlow(json) {
