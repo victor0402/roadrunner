@@ -47,6 +47,7 @@ class CheckRunFlow {
   };
 
   static async isFlow(json) {
+    console.log(json.state)
     return json.commit && (json.state === 'success' || json.state === 'failure' || json.state === 'pending');
   };
 }
