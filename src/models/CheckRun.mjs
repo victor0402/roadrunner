@@ -1,9 +1,11 @@
+import mongodb from 'mongodb';
 import db from '../Database.mjs'
 
 const collectionName = 'checkRuns';
 
 class CheckRun {
   constructor(data) {
+    this.id = data.id;
     this.createdAt = data.createdAt;
     this.commitSha = data.commitSha;
     this.state = data.state;
@@ -23,10 +25,23 @@ class CheckRun {
     return this;
   };
 
+  async update() {
+    const collection = await db.getCollection(collectionName);
+    const json = {
+      state: this.state,
+      createdAt: this.createdAt
+    };
+
+    const objectID = new mongodb.ObjectID(this.id)
+    return await collection.updateOne({ _id: objectID }, { $set: json })
+  };
+
   async createOrLoadByCommitSha() {
     const checkRun = await CheckRun.findByCommitSha(this.commitSha);
-    
+
     if (checkRun) {
+      checkRun.state = this.state;
+      await checkRun.update();
       return checkRun;
     }
 
@@ -44,14 +59,14 @@ class CheckRun {
       return null;
     }
 
-    return new CheckRun(response)
+    return new CheckRun({ ...response, id: response._id })
   };
 
   static async findLastStateForCommits(commitsSha) {
     const collection = await db.getCollection(collectionName);
-    const query = commitsSha.map(s => ({commitSha: s}))
+    const query = commitsSha.map(s => ({ commitSha: s }))
 
-    const response = await collection.find({$or: query})
+    const response = await collection.find({ $or: query })
     let array = await response.toArray();
     if (array.length === 0) {
       return null;
@@ -60,7 +75,7 @@ class CheckRun {
     array = array.sort((a, b) => b.createdAt - a.createdAt)
     const checkRun = array[0];
 
-    return new CheckRun(checkRun);
+    return new CheckRun({ ...checkRun, id: checkRun._id });
   };
 };
 

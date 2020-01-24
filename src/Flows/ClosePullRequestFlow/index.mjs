@@ -1,11 +1,10 @@
-import Slack from '../../Slack.mjs';
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 import Github from '../../Github.mjs';
 import Commit from '../../models/Commit.mjs';
-import SlackReaction from '../../enums/SlackReaction.mjs';
+import Reactji from '../../services/Reactji.mjs';
 
 class ClosePullRequestFlow {
   static async start(json) {
@@ -40,12 +39,8 @@ class ClosePullRequestFlow {
       }).create();
     })
 
-    Slack.toggleReaction({
-      slackChannel: channel,
-      reactionToAdd: SlackReaction.merge.simple(),
-      reactionsToRemove,
-      messageTs: mainSlackMessage.ts
-    });
+    const reactji = new Reactji(mainSlackMessage.ts, 'closed', channel, 'flow')
+    reactji.react(true);
   };
 
   static async isFlow(json) {

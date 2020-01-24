@@ -1,8 +1,7 @@
-import Slack from '../../Slack.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
-import SlackReaction from '../../enums/SlackReaction.mjs';
+import ChannelMessage from '../../services/ChannelMessage.mjs';
 
 const getContent = (json) => (
   {
@@ -28,20 +27,11 @@ class NewReviewSubmissionFlow {
     const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
     const { channel } = repositoryData;
 
-    let slackMessage = null;
-
+    const channelMessage = new ChannelMessage(channel, slackThreadTS)
     if (state === 'changes_requested') {
-      slackMessage = `${SlackReaction.warning.simple()} changes requested!`
+      channelMessage.notifyChangesRequest();
     } else if (message !== '') {
-      slackMessage = `${SlackReaction.speech_balloon.simple()} There is a new message!`
-    }
-
-    if (slackMessage) {
-      Slack.sendMessage({
-        message: slackMessage,
-        slackChannel: channel,
-        threadID: slackThreadTS
-      })
+      channelMessage.notifyNewMessage();
     } else {
       console.log('No slack message was set!')
       console.log('Flow aborted!')

@@ -25,6 +25,7 @@ class Slack {
 
     return res.ts;
   };
+
   static async sendMessage({ message, slackChannel, prId, threadID }) {
     const token = process.env.SLACK_API_KEY;
 
@@ -45,16 +46,8 @@ class Slack {
       parse: 'full'
     });
 
-    if (prId) {
-      const slackMessage = new SlackMessage(prId, res.ts)
-      slackMessage.create()
-    }
-
     return res.ts;
   };
-  // 3. Send a private message to the person who failed the PR
-  // 4. Only send messages after CI has passed
-  // 5. Update the git flow
 
   static async sendReaction({ slackChannel, reaction, messageTs }) {
     const token = process.env.SLACK_API_KEY;
@@ -77,7 +70,7 @@ class Slack {
   };
 
   static async toggleReaction({ slackChannel, reaction, messageTs }) {
-    const reactionsToRemove = SlackReaction.listSimpleRemoving(reactionToAdd)
+    const reactionsToRemove = SlackReaction.listSimpleRemoving(reaction)
     reactionsToRemove.forEach(reaction => {
       Slack.removeReaction({
         slackChannel,

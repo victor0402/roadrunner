@@ -1,10 +1,9 @@
-import Slack from '../../Slack.mjs';
 import SlackRepository from '../../SlackRepository.mjs'
 import SlackMessage from '../../models/SlackMessage.mjs'
 import Commit from '../../models/Commit.mjs';
 import CheckRun from '../../models/CheckRun.mjs';
-import SlackReaction from '../../enums/SlackReaction.mjs';
 import Reactji from '../../services/Reactji.mjs';
+import DirectMessage from '../../services/DirectMessage.mjs';
 
 class CheckRunFlow {
   static async start(json) {
@@ -28,14 +27,9 @@ class CheckRunFlow {
 
     const { channel } = repositoryData;
 
-    let message;
-
     if (state === 'failure') {
-      message = `${SlackReaction.rotating_light.forMessage()} CI Failed for PR: ${pr.link}`
-      Slack.sendDirectMessage({
-        message,
-        slackUsername: SlackRepository.getSlackUser(pr.username),
-      });
+      const directMessage = new DirectMessage(pr.username)
+      directMessage.notifyCIFailure()
     }
 
     pr.updateCIState(state)

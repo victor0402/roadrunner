@@ -10,6 +10,7 @@ import SlackMessage from './models/SlackMessage.mjs';
 import Flows from './Flows/index.mjs';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';
+import checkRunFailureJson from './payload-examples/checkRunFailure.json';
 import closePrJson from './payload-examples/closePR.json';
 import newFullPrJson from './payload-examples/newFullPR.json';
 import newChangeJson from './payload-examples/newPush.json';
@@ -112,6 +113,12 @@ app.get('/test-submit-review-changes-approved', async (req, res) => {
 app.get('/test-checkrun-pending', async (req, res) => {
   processFlowRequest({
     body: checkRunPendingJson,
+  }, res)
+})
+
+app.get('/test-checkrun-failure', async (req, res) => {
+  processFlowRequest({
+    body: checkRunFailureJson,
   }, res)
 })
 

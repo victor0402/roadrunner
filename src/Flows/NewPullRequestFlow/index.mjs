@@ -1,12 +1,12 @@
-import Slack from '../../Slack.mjs'
 import Github from '../../Github.mjs'
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
 import Commit from '../../models/Commit.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
-import SlackReaction from '../../enums/SlackReaction.mjs';
 import CheckRun from '../../models/CheckRun.mjs';
 import Reactji from '../../services/Reactji.mjs';
+import ChannelMessage from '../../services/ChannelMessage.mjs';
+import SlackMessage from '../../models/SlackMessage.mjs';
 
 class NewPullRequestFlow {
   static async start(json) {
@@ -19,13 +19,10 @@ class NewPullRequestFlow {
 
     await pr.create()
 
-    const message = `${devGroup} :point_right:  please review this new PR: ${pr.link}`;
+    const ts = await (new ChannelMessage(channel)).requestReview(devGroup, pr.link)
 
-    const ts = await Slack.sendMessage({
-      message,
-      slackChannel: channel,
-      prId: pr.id,
-    });
+    const slackMessage = new SlackMessage(pr.id, ts)
+    slackMessage.create()
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
 

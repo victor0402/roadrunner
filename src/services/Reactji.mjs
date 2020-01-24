@@ -5,6 +5,7 @@ const STATES = {
   ciSuccess: SlackReaction.white_check_mark.simple(),
   ciFailure: SlackReaction.rotating_light.simple(),
   ciPending: SlackReaction.hourglass.simple(),
+  flowClosed: SlackReaction.merge.simple()
 }
 
 class Reactji {
