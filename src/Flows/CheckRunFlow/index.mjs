@@ -39,7 +39,7 @@ class CheckRunFlow {
 
     pr.updateCIState(state)
 
-    const reactji = new Reactji(mainSlackMessage.ts, state, channel)
+    const reactji = new Reactji(mainSlackMessage.ts, state, channel, 'ci')
     reactji.react(true)
   };
 
