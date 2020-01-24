@@ -25,8 +25,8 @@ class UpdatePullRequestCodeFlow {
     const repositoryData = SlackRepository.getRepositoryData(repositoryName)
     const { channel } = repositoryData;
 
-    const ChannelMessage = new ChannelMessage(channel, slackThreadTS)
-    channel.notifyNewChange()
+    const channelMessage = new ChannelMessage(channel, slackThreadTS)
+    channelMessage.notifyNewChange()
   };
 
   static async isFlow(json) {

@@ -1,6 +1,7 @@
 import mongodb from 'mongodb';
 import db from '../Database.mjs';
 import SlackMessage from './SlackMessage.mjs';
+import PullRequestReview from './PullRequestReview.mjs';
 
 const collectionName = 'pullRequests';
 
@@ -33,6 +34,11 @@ class PullRequest {
   async getMainSlackMessage() {
     this.mainSlackMessage = await SlackMessage.findByPRId(this.id)
     return this.mainSlackMessage;
+  }
+
+  async getReviews() {
+    this.reviews = await PullRequestReview.findByPRId(this.id)
+    return this.reviews;
   }
 
   async create() {

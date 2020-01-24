@@ -70,13 +70,28 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 app.get('/open-prs', async (req, res) => {
   let prs = await PullRequest.list({ state: 'open' })
   // Remove test repository
-  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
-
+    prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
+//  prs = prs.filter(pr => pr.id === '5e2a59210b72038460276690')
+  await Promise.all(prs.map(pr => {
+    return pr.getReviews();
+  }))
 
   res.send({
     status: 200,
     length: prs.length,
-    data: prs.map(pr => ({ state: pr.state, link: pr.link, ci_state: pr.ciState }))
+    data: prs.map(pr => {
+      const reviews = pr.reviews;
+      const approvedReviews = pr.reviews.filter(r => r.state === 'approved')
+      const reprovedReviews = pr.reviews.filter(r => r.state === 'changes_requested')
+
+      return {
+        state: pr.state,
+        link: pr.link,
+        ci_state: pr.ciState,
+        approved_by: approvedReviews.map(r => r.username),
+        reproved_by: reprovedReviews.map(r => r.username),
+      }
+    })
   })
 })
 

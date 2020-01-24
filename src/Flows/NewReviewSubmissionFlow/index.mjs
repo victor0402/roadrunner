@@ -1,12 +1,14 @@
 import SlackRepository from '../../SlackRepository.mjs'
 import PullRequest from '../../models/PullRequest.mjs'
+import PullRequestReview from '../../models/PullRequestReview.mjs'
 import pullRequestParser from '../../parsers/pullRequestParser.mjs'
 import ChannelMessage from '../../services/ChannelMessage.mjs';
 
 const getContent = (json) => (
   {
     state: json.review.state,
-    message: json.review.body
+    message: json.review.body,
+    username: json.review.user.login
   }
 );
 
@@ -15,7 +17,7 @@ class NewReviewSubmissionFlow {
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
     const content = getContent(json);
-    const { message, state } = content;
+    const { message, state, username } = content;
     const mainSlackMessage = await pr.getMainSlackMessage();
 
     if (!mainSlackMessage) {
@@ -23,11 +25,17 @@ class NewReviewSubmissionFlow {
       return;
     }
 
+    await new PullRequestReview({
+      prId: pr.id,
+      username,
+      state 
+    }).createOrLoadByUsernameAndPR()
+
     const slackThreadTS = mainSlackMessage.ts;
     const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
     const { channel } = repositoryData;
 
-    const channelMessage = new ChannelMessage(channel, slackThreadTS)
+    const channelMessage = new ChannelMessage(channel, slackThreadTS);
     if (state === 'changes_requested') {
       channelMessage.notifyChangesRequest();
     } else if (message !== '') {
