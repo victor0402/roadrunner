@@ -16,7 +16,7 @@ class CheckRunFlow {
 
 
     const commit = await Commit.findBySha(sha)
-    if (!commit || state === 'pending') {
+    if (!commit) {
       return
     }
 
