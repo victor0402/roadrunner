@@ -19,7 +19,8 @@ class CheckRunFlow {
     const pr = await PullRequest.findBy({ branchName, repositoryName, state: 'open' });
 
     if (!pr) {
-      console.log('No PR found');
+
+      console.log('No PR found', { branchName, repositoryName, state: 'open' });
       console.log('Flow aborted!')
       return;
     }
