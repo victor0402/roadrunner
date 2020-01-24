@@ -10,10 +10,7 @@ class CheckRunFlow {
     const { sha, state } = json;
 
     const currentCheckrun = await new CheckRun({ commitSha: sha, state })
-    console.log('current', currentCheckrun)
-    const newCheckRun = await currentCheckrun.createOrLoadByCommitSha();
-    console.log('new checkrun', newCheckRun)
-
+    await currentCheckrun.createOrLoadByCommitSha();
 
     const commit = await Commit.findBySha(sha)
     if (!commit) {
