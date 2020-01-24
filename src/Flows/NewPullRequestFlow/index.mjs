@@ -43,7 +43,10 @@ class NewPullRequestFlow {
 
     const commitsShas = ghCommits.map(c => c.sha);
     const lastCheckRun = await CheckRun.findLastStateForCommits(commitsShas);
-    const reactji = new Reactji(ts, lastCheckRun.state, channel, 'ci', 'pending')
+    const lastCheckRunState = lastCheckRun ? lastCheckRun.state : null;
+
+
+    const reactji = new Reactji(ts, lastCheckRunState, channel, 'ci', 'pending')
 
     reactji.react()
 
