@@ -1,6 +1,5 @@
 import Octokit from '@octokit/rest';
 
-
 class Github {
   static async getCommits(pullRequestId, owner, repository) {
     const octokit = new Octokit({

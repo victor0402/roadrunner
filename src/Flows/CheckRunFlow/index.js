@@ -1,7 +1,5 @@
-import SlackRepository from '../../SlackRepository'
+import { SlackRepository, Reactji, DirectMessage } from '../../services'
 import { SlackMessage, PullRequest, CheckRun } from '../../models';
-import Reactji from '../../services/Reactji';
-import DirectMessage from '../../services/DirectMessage';
 
 class CheckRunFlow {
   static async start(json) {

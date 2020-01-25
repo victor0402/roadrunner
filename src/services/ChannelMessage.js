@@ -1,4 +1,4 @@
-import Slack from '../Slack';
+import Slack from './Slack';
 import SlackReaction from '../enums/SlackReaction';
 
 class ChannelMessage {

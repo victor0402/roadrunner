@@ -1,7 +1,6 @@
-import SlackRepository from '../../SlackRepository';
+import { SlackRepository, ChannelMessage } from '../../services'
 import { PullRequestReview, PullRequest } from '../../models';
 import pullRequestParser from '../../parsers/pullRequestParser'
-import ChannelMessage from '../../services/ChannelMessage';
 
 const getContent = (json) => (
   {

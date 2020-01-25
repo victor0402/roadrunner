@@ -1,6 +1,5 @@
-import SlackRepository from '../../SlackRepository'
+import { SlackRepository, ChannelMessage } from '../../services'
 import { PullRequest } from '../../models';
-import ChannelMessage from '../../services/ChannelMessage'
 import pushChangeParser from '../../parsers/pushChangeParser'
 
 class UpdatePullRequestCodeFlow {

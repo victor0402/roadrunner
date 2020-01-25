@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import db from '../Database'
+import db from '../services/Database'
 
 const collectionName = 'pullRequestsReviews';
 
