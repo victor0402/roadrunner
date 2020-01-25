@@ -156,12 +156,6 @@ app.get('/test-github/:prId', async (req, res) => {
   res.send(commit)
 })
 
-app.get('/test-github-status', async (req, res) => {
-  const commit = await Github.getStatus('test-pr', 'codelittinc', 'codelitt-v2')
-
-  res.send(commit)
-})
-
 
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
