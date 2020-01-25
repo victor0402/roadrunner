@@ -1,5 +1,5 @@
 import SlackApi from '@slack/web-api';
-import SlackReaction from '../enums/SlackReaction';
+import SlackReaction from '@enums/SlackReaction';
 
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {

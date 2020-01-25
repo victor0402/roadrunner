@@ -1,4 +1,4 @@
-import db from '../services/Database'
+import db from '@services/Database'
 import PullRequest from './PullRequest'
 
 const collectionName = 'commits';

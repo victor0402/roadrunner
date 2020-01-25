@@ -1,5 +1,5 @@
-import { SlackRepository, Reactji, Github } from '../../services'
-import { SlackMessage, PullRequest, Commit } from '../../models';
+import { SlackRepository, Reactji, Github } from '@services'
+import { SlackMessage, PullRequest, Commit } from '@models';
 import pullRequestParser from '../../parsers/pullRequestParser'
 
 class ClosePullRequestFlow {

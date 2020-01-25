@@ -6,8 +6,8 @@
   "main": "src/index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-modules --experimental-json-modules src/index.js",
-    "start:dev": "nodemon --es-module-specifier-resolution=node --experimental-modules --experimental-json-modules src/index.js"
+    "start": "node --no-warnings --es-module-specifier-resolution=node --experimental-modules --experimental-json-modules --loader ./loader.js src/index.js",
+    "start:dev": "nodemon --no-warnings --es-module-specifier-resolution=node --experimental-modules --experimental-json-modules --loader ./loader.js src/index.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,10 @@
   "devDependencies": {
     "nodemon": "^2.0.2",
     "pry": "^0.8.7"
+  },
+  "aliases": {
+    "@services": "./src/services",
+    "@models": "./src/models",
+    "@enums": "./src/enums"
   }
 }

@@ -1,5 +1,5 @@
 import Slack from './Slack';
-import SlackReaction from '../enums/SlackReaction';
+import SlackReaction from '@enums/SlackReaction';
 
 class ChannelMessage {
   constructor(channel, ts) {

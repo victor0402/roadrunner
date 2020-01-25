@@ -1,4 +1,4 @@
-import db from '../services/Database';
+import db from '@services/Database';
 
 const collectionName = 'slackMessages';
 

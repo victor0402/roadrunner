@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import db from '../services/Database';
+import db from '@services/Database';
 import SlackMessage from './SlackMessage';
 import PullRequestReview from './PullRequestReview';
 
