@@ -1,28 +1,10 @@
 import mongodb from 'mongodb';
-import db from '@services/Database';
-import SlackMessage from './SlackMessage';
-import PullRequestReview from './PullRequestReview';
+import Database from '@services/Database';
+import { BaseModel, SlackMessage, PullRequestReview } from '@models';
 
 const collectionName = 'pullRequests';
 
-class PullRequest {
-  constructor(data) {
-    this.id = data.id || data._id ? data._id.toString() : undefined
-    this.branchName = data.branchName;
-    this.baseBranchName = data.baseBranchName;
-    this.link = data.link;
-    this.ghId = data.ghId;
-    this.repositoryName = data.repositoryName;
-    this.title = data.title;
-    this.draft = data.draft;
-    this.state = data.state;
-    this.owner = data.owner;
-    this.createdAt = data.createdAt;
-    this.closedAt = data.closedAt;
-    this.ciState = data.ciState;
-    this.username = data.username;
-  }
-
+class PullRequest extends BaseModel{
   isDeployPR() {
     return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && (this.branchName === 'develop' || this.branchName === 'qa')
   }
@@ -42,7 +24,7 @@ class PullRequest {
   }
 
   async create() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     this.createdAt = Date.now();
     this.ciState = 'pending';
 
@@ -62,7 +44,7 @@ class PullRequest {
   }
 
   async update() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const json = this.toJson();
     delete json.id
     const objectID = new mongodb.ObjectID(this.id)
@@ -75,7 +57,7 @@ class PullRequest {
   }
 
   static async findBy(query) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const response = await collection.findOne(query);
     if (!response) {
       return null;
@@ -84,7 +66,7 @@ class PullRequest {
   }
 
   static async list(filter = {}) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const response = await collection.find(filter);
 
     const array = await response.toArray()
@@ -93,7 +75,7 @@ class PullRequest {
   }
 
   async load() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const pr = await collection.findOne({
       branchName: this.branchName,
       ghId: this.ghId,

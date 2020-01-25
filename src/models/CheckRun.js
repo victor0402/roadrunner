@@ -1,18 +1,13 @@
 import mongodb from 'mongodb';
-import db from '@services/Database'
+
+import Database from '@services/Database'
+import { BaseModel } from '@models';
 
 const collectionName = 'checkRuns';
 
-class CheckRun {
-  constructor(data) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.commitSha = data.commitSha;
-    this.state = data.state;
-  }
-
+class CheckRun extends BaseModel {
   async create() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const commit = await collection.insertOne({
       createdAt: Date.now(),
@@ -26,7 +21,7 @@ class CheckRun {
   };
 
   async update() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const json = {
       state: this.state,
       createdAt: this.createdAt
@@ -49,7 +44,7 @@ class CheckRun {
   }
 
   static async findByCommitSha(commitSha) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const response = await collection.findOne({
       commitSha,
@@ -63,7 +58,7 @@ class CheckRun {
   };
 
   static async findLastStateForCommits(commitsSha) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const query = commitsSha.map(s => ({ commitSha: s }))
 
     const response = await collection.find({ $or: query })

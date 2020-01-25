@@ -1,25 +1,16 @@
-import db from '@services/Database'
-import PullRequest from './PullRequest'
+import Database from '@services/Database'
+import { BaseModel, PullRequest } from '@models';
 
 const collectionName = 'commits';
 
-class Commit {
-  constructor(data) {
-    this.prId = data.prId;
-    this.sha = data.sha;
-    this.message = data.message;
-    this.createdAt = data.createdAt;
-    this.authorName = data.authorName;
-    this.authorEmail = data.authorEmail;
-  }
-
+class Commit extends BaseModel {
   async getPullRequest() {
     this.pullRequest = await PullRequest.findById(this.prId)
     return this.pullRequest;
   }
 
   async create() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const commit = await collection.insertOne({
       prId: this.prId,
@@ -36,7 +27,7 @@ class Commit {
   }
 
   static async findBySha(sha) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const result = await collection.findOne({
       sha
     });
@@ -49,7 +40,7 @@ class Commit {
   }
 
   static async findByPRId(prId) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const result = await collection.findOne({
       prId
     });

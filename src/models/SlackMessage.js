@@ -1,7 +1,8 @@
-import db from '@services/Database';
+import Database from '@services/Database';
 
 const collectionName = 'slackMessages';
 
+// @TODO: refactor to use BaseModel
 class SlackMessage {
   constructor(prId, ts) {
     this.prId = prId;
@@ -9,7 +10,7 @@ class SlackMessage {
   }
 
   async create() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const slackMessage = await collection.insertOne({
       prId: this.prId,
@@ -19,8 +20,8 @@ class SlackMessage {
     this.id = slackMessage.ops[0]._id
   }
 
-  static async findByPRId(prId) {
-    const collection = await db.getCollection(collectionName);
+  static async DatabaseyPRId(prId) {
+    const collection = await Database.getCollection(collectionName);
     const result = await collection.findOne({
       prId
     });

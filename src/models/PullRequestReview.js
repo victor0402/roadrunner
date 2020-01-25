@@ -1,20 +1,13 @@
 import mongodb from 'mongodb';
-import db from '@services/Database'
+import Database from '@services/Database'
+
+import { BaseModel } from '@models';
 
 const collectionName = 'pullRequestsReviews';
 
-class PullRequestReview {
-  constructor(data) {
-    this.id = data.id;
-    this.createdAt = data.createdAt;
-    this.prId = data.prId;
-    this.state = data.state;
-    this.username = data.username;
-    this.updatedAt = data.updatedAt;
-  }
-
+class PullRequestReview extends BaseModel {
   async create() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const commit = await collection.insertOne({
       createdAt: Date.now(),
@@ -29,7 +22,7 @@ class PullRequestReview {
   };
 
   async update() {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
     const json = {
       state: this.state,
       updatedAt: Date.now()
@@ -56,7 +49,7 @@ class PullRequestReview {
   }
 
   static async findBy(query) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const response = await collection.findOne(query);
 
@@ -68,7 +61,7 @@ class PullRequestReview {
   };
 
   static async list(query) {
-    const collection = await db.getCollection(collectionName);
+    const collection = await Database.getCollection(collectionName);
 
     const response = await collection.find(query);
 
