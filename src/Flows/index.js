@@ -1,9 +1,9 @@
-import NewPullRequestFlow from './NewPullRequestFlow/index.mjs'
-import ClosePullRequestFlow from './ClosePullRequestFlow/index.mjs'
-import UpdatePullRequestCodeFlow from './UpdatePullRequestCodeFlow/index.mjs'
-import NewReviewSubmissionFlow from './NewReviewSubmissionFlow/index.mjs'
-import SendChangelogFlow from './SendChangelogFlow/index.mjs';
-import CheckRunFlow from './CheckRunFlow/index.mjs';
+import NewPullRequestFlow from './NewPullRequestFlow';
+import ClosePullRequestFlow from './ClosePullRequestFlow';
+import UpdatePullRequestCodeFlow from './UpdatePullRequestCodeFlow';
+import NewReviewSubmissionFlow from './NewReviewSubmissionFlow';
+import SendChangelogFlow from './SendChangelogFlow';
+import CheckRunFlow from './CheckRunFlow';
 
 const getFlow = async (json) => {
   if (await NewPullRequestFlow.isFlow(json)) {

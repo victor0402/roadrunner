@@ -1,7 +1,7 @@
 import mongodb from 'mongodb';
-import db from '../Database.mjs';
-import SlackMessage from './SlackMessage.mjs';
-import PullRequestReview from './PullRequestReview.mjs';
+import db from '../Database';
+import SlackMessage from './SlackMessage';
+import PullRequestReview from './PullRequestReview';
 
 const collectionName = 'pullRequests';
 

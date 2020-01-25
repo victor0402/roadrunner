@@ -1,10 +1,9 @@
-import SlackRepository from '../../SlackRepository.mjs'
-import SlackMessage from '../../models/SlackMessage.mjs'
-import PullRequest from '../../models/PullRequest.mjs'
-import Commit from '../../models/Commit.mjs';
-import CheckRun from '../../models/CheckRun.mjs';
-import Reactji from '../../services/Reactji.mjs';
-import DirectMessage from '../../services/DirectMessage.mjs';
+import SlackRepository from '../../SlackRepository'
+import SlackMessage from '../../models/SlackMessage'
+import PullRequest from '../../models/PullRequest'
+import CheckRun from '../../models/CheckRun';
+import Reactji from '../../services/Reactji';
+import DirectMessage from '../../services/DirectMessage';
 
 class CheckRunFlow {
   static async start(json) {

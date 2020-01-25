@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import db from '../Database.mjs'
+import db from '../Database'
 
 const collectionName = 'checkRuns';
 

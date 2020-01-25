@@ -1,12 +1,12 @@
-import Github from '../../Github.mjs'
-import SlackRepository from '../../SlackRepository.mjs'
-import PullRequest from '../../models/PullRequest.mjs'
-import Commit from '../../models/Commit.mjs'
-import pullRequestParser from '../../parsers/pullRequestParser.mjs'
-import CheckRun from '../../models/CheckRun.mjs';
-import Reactji from '../../services/Reactji.mjs';
-import ChannelMessage from '../../services/ChannelMessage.mjs';
-import SlackMessage from '../../models/SlackMessage.mjs';
+import Github from '../../Github'
+import SlackRepository from '../../SlackRepository'
+import PullRequest from '../../models/PullRequest'
+import Commit from '../../models/Commit'
+import pullRequestParser from '../../parsers/pullRequestParser'
+import CheckRun from '../../models/CheckRun';
+import Reactji from '../../services/Reactji';
+import ChannelMessage from '../../services/ChannelMessage';
+import SlackMessage from '../../models/SlackMessage';
 
 class NewPullRequestFlow {
   static async start(json) {

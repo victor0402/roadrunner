@@ -1,5 +1,5 @@
-import Slack from '../Slack.mjs';
-import SlackReaction from '../enums/SlackReaction.mjs';
+import Slack from '../Slack';
+import SlackReaction from '../enums/SlackReaction';
 
 const STATES = {
   ciSuccess: SlackReaction.white_check_mark.simple(),

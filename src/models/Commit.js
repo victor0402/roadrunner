@@ -1,5 +1,5 @@
-import db from '../Database.mjs'
-import PullRequest from './PullRequest.mjs'
+import db from '../Database'
+import PullRequest from './PullRequest'
 
 const collectionName = 'commits';
 

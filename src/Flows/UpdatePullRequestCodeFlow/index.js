@@ -1,7 +1,7 @@
-import SlackRepository from '../../SlackRepository.mjs'
-import PullRequest from '../../models/PullRequest.mjs'
-import ChannelMessage from '../../services/ChannelMessage.mjs'
-import pushChangeParser from '../../parsers/pushChangeParser.mjs'
+import SlackRepository from '../../SlackRepository'
+import PullRequest from '../../models/PullRequest'
+import ChannelMessage from '../../services/ChannelMessage'
+import pushChangeParser from '../../parsers/pushChangeParser'
 
 class UpdatePullRequestCodeFlow {
   static async start(json) {

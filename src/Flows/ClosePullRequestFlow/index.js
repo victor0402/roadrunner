@@ -1,10 +1,10 @@
-import SlackRepository from '../../SlackRepository.mjs'
-import PullRequest from '../../models/PullRequest.mjs'
-import SlackMessage from '../../models/SlackMessage.mjs'
-import pullRequestParser from '../../parsers/pullRequestParser.mjs'
-import Github from '../../Github.mjs';
-import Commit from '../../models/Commit.mjs';
-import Reactji from '../../services/Reactji.mjs';
+import SlackRepository from '../../SlackRepository'
+import PullRequest from '../../models/PullRequest'
+import SlackMessage from '../../models/SlackMessage'
+import pullRequestParser from '../../parsers/pullRequestParser'
+import Github from '../../Github';
+import Commit from '../../models/Commit';
+import Reactji from '../../services/Reactji';
 
 class ClosePullRequestFlow {
   static async start(json) {

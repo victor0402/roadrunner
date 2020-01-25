@@ -1,9 +1,9 @@
-import Slack from '../../Slack.mjs'
-import SlackRepository from '../../SlackRepository.mjs'
-import GitHub from '../../Github.mjs'
+import Slack from '../../Slack'
+import SlackRepository from '../../SlackRepository'
+import GitHub from '../../Github'
 // import Commit from '../../models/Commit.mjs'
-import PullRequest from '../../models/PullRequest.mjs'
-import pullRequestParser from '../../parsers/pullRequestParser.mjs'
+import PullRequest from '../../models/PullRequest'
+import pullRequestParser from '../../parsers/pullRequestParser'
 
 class SendChangelogFlow {
   static async start(json) {

@@ -3,11 +3,11 @@ dotenv.config()
 
 import bodyParser from 'body-parser';
 import express from 'express';
-import SlackRepository from './SlackRepository.mjs';
-import PullRequest from './models/PullRequest.mjs'
-import Github from './Github.mjs';
-import SlackMessage from './models/SlackMessage.mjs';
-import Flows from './Flows/index.mjs';
+import SlackRepository from './SlackRepository';
+import PullRequest from './models/PullRequest'
+import Github from './Github';
+import SlackMessage from './models/SlackMessage';
+import Flows from './Flows/index';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';
 import checkRunFailureJson from './payload-examples/checkRunFailure.json';

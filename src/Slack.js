@@ -1,6 +1,6 @@
-import SlackMessage from './models/SlackMessage.mjs'
+import SlackMessage from './models/SlackMessage'
 import SlackApi from '@slack/web-api';
-import SlackReaction from './enums/SlackReaction.mjs';
+import SlackReaction from './enums/SlackReaction';
 
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {
