@@ -1,54 +1,29 @@
-import Database from '@services/Database'
 import { BaseModel, PullRequest } from '@models';
 
-const collectionName = 'commits';
-
 class Commit extends BaseModel {
+  static collectionName = 'commits';
+
   async getPullRequest() {
-    this.pullRequest = await PullRequest.findById(this.prId)
-    return this.pullRequest;
+    return await PullRequest.findById(this.prId)
   }
 
-  async create() {
-    const collection = await Database.getCollection(collectionName);
+  static async findBySha(sha) {
+    return await BaseModel.findBy({ sha });
+  }
 
-    const commit = await collection.insertOne({
+  static async findByPRId(prId) {
+    return await BaseModel.findBy({ prId });
+  }
+
+  toJson() {
+    return {
       prId: this.prId,
       sha: this.sha,
       message: this.message,
       createdAt: this.createdAt,
       authorName: this.authorName,
       authorEmail: this.authorEmail
-    });
-
-    this.id = commit.ops[0]._id
-
-    return this;
-  }
-
-  static async findBySha(sha) {
-    const collection = await Database.getCollection(collectionName);
-    const result = await collection.findOne({
-      sha
-    });
-
-    if(!result) {
-      return;
     }
-
-    return new Commit(result)
-  }
-
-  static async findByPRId(prId) {
-    const collection = await Database.getCollection(collectionName);
-    const result = await collection.findOne({
-      prId
-    });
-
-    if(!result) {
-      return;
-    }
-    return new Commit(result.prId, result.sha, result.message)
   }
 };
 

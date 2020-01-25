@@ -1,35 +1,8 @@
-import mongodb from 'mongodb';
-
 import Database from '@services/Database'
 import { BaseModel } from '@models';
 
-const collectionName = 'checkRuns';
-
 class CheckRun extends BaseModel {
-  async create() {
-    const collection = await Database.getCollection(collectionName);
-
-    const commit = await collection.insertOne({
-      createdAt: Date.now(),
-      commitSha: this.commitSha,
-      state: this.state,
-    });
-
-    this.id = commit.ops[0]._id
-
-    return this;
-  };
-
-  async update() {
-    const collection = await Database.getCollection(collectionName);
-    const json = {
-      state: this.state,
-      createdAt: this.createdAt
-    };
-
-    const objectID = new mongodb.ObjectID(this.id)
-    return await collection.updateOne({ _id: objectID }, { $set: json })
-  };
+  static collectionName = 'checkRuns';
 
   async createOrLoadByCommitSha() {
     const checkRun = await CheckRun.findByCommitSha(this.commitSha);
@@ -44,21 +17,11 @@ class CheckRun extends BaseModel {
   }
 
   static async findByCommitSha(commitSha) {
-    const collection = await Database.getCollection(collectionName);
-
-    const response = await collection.findOne({
-      commitSha,
-    });
-
-    if (!response) {
-      return null;
-    }
-
-    return new CheckRun({ ...response, id: response._id })
+    return await BaseModel.findBy({ commitSha })
   };
 
   static async findLastStateForCommits(commitsSha) {
-    const collection = await Database.getCollection(collectionName);
+    const collection = await Database.getCollection(CheckRun.collectionName);
     const query = commitsSha.map(s => ({ commitSha: s }))
 
     const response = await collection.find({ $or: query })
@@ -72,6 +35,13 @@ class CheckRun extends BaseModel {
 
     return new CheckRun({ ...checkRun, id: checkRun._id });
   };
+
+  toJson() {
+    return {
+      state: this.state,
+      createdAt: this.createdAt
+    };
+  }
 };
 
 export default CheckRun;
