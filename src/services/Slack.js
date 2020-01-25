@@ -48,6 +48,29 @@ class Slack {
     return res.ts;
   };
 
+  static async updateMessage({ message, slackChannel, threadID }) {
+    const token = process.env.SLACK_API_KEY;
+    console.log('updating', message)
+
+    const slackClient = new SlackApi.WebClient(token);
+
+    const response = await slackClient.channels.list({
+      limit: 500
+    });
+
+    let channels = response.channels.sort((a, b) => a.created < b.created)
+    const channel = channels.find(c => c.name === slackChannel)
+    console.log(channel, threadID)
+
+    await slackClient.chat.update({
+      channel: channel.id,
+      text: message,
+      ts: threadID,
+      unfurl_links: false,
+      parse: 'full'
+    });
+  };
+
   static async sendReaction({ slackChannel, reaction, messageTs }) {
     const token = process.env.SLACK_API_KEY;
     const slackClient = new SlackApi.WebClient(token);

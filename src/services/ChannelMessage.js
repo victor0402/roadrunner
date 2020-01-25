@@ -12,6 +12,12 @@ class ChannelMessage {
     return await this.send(message)
   }
 
+  async closePullRequest(devGroup, link) {
+    console.log('closing pr')
+    const message = `~${devGroup} :point_right:  please review this new PR: ${link} .~`;
+    return await this.update(message)
+  }
+
   async notifyChangesRequest() {
     const message = `${SlackReaction.warning.forMessage()} changes requested!`;
     return await this.send(message)
@@ -29,6 +35,15 @@ class ChannelMessage {
 
   async send(message) {
     return await Slack.sendMessage({
+      message,
+      slackChannel: this.channel,
+      threadID: this.ts
+    });
+  }
+
+  async update(message) {
+    console.log(this)
+    return await Slack.updateMessage({
       message,
       slackChannel: this.channel,
       threadID: this.ts

@@ -1,5 +1,5 @@
-import { SlackRepository, Reactji, Github } from '@services'
-import { SlackMessage, PullRequest, Commit } from '@models';
+import { SlackRepository, Reactji, Github, ChannelMessage } from '@services'
+import { PullRequest, Commit } from '@models';
 import pullRequestParser from '../../parsers/pullRequestParser'
 
 class ClosePullRequestFlow {
@@ -14,7 +14,7 @@ class ClosePullRequestFlow {
 
     const repositoryData = SlackRepository.getRepositoryData(pr.repositoryName)
 
-    const { channel } = repositoryData;
+    const { devGroup, channel } = repositoryData;
 
     await pr.close()
 
@@ -34,6 +34,8 @@ class ClosePullRequestFlow {
         authorName: name,
       }).create();
     })
+
+    await (new ChannelMessage(channel, mainSlackMessage.ts)).closePullRequest(devGroup, pr.link)
 
     const reactji = new Reactji(mainSlackMessage.ts, 'closed', channel, 'flow')
     reactji.react(true);
