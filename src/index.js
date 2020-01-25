@@ -4,9 +4,8 @@ dotenv.config()
 import bodyParser from 'body-parser';
 import express from 'express';
 import SlackRepository from './SlackRepository';
-import PullRequest from './models/PullRequest'
+import { PullRequest, SlackMessage } from './models';
 import Github from './Github';
-import SlackMessage from './models/SlackMessage';
 import Flows from './Flows/index';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';

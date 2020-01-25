@@ -1,12 +1,9 @@
 import Github from '../../Github'
 import SlackRepository from '../../SlackRepository'
-import PullRequest from '../../models/PullRequest'
-import Commit from '../../models/Commit'
+import { SlackMessage, PullRequest, Commit, CheckRun } from '../../models';
 import pullRequestParser from '../../parsers/pullRequestParser'
-import CheckRun from '../../models/CheckRun';
 import Reactji from '../../services/Reactji';
 import ChannelMessage from '../../services/ChannelMessage';
-import SlackMessage from '../../models/SlackMessage';
 
 class NewPullRequestFlow {
   static async start(json) {

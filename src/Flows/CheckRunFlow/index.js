@@ -1,7 +1,5 @@
 import SlackRepository from '../../SlackRepository'
-import SlackMessage from '../../models/SlackMessage'
-import PullRequest from '../../models/PullRequest'
-import CheckRun from '../../models/CheckRun';
+import { SlackMessage, PullRequest, CheckRun } from '../../models';
 import Reactji from '../../services/Reactji';
 import DirectMessage from '../../services/DirectMessage';
 

@@ -2,7 +2,7 @@ import Slack from '../../Slack'
 import SlackRepository from '../../SlackRepository'
 import GitHub from '../../Github'
 // import Commit from '../../models/Commit.mjs'
-import PullRequest from '../../models/PullRequest'
+import { PullRequest } from '../../models';
 import pullRequestParser from '../../parsers/pullRequestParser'
 
 class SendChangelogFlow {
