@@ -3,12 +3,27 @@ import mongo from 'mongodb';
 const DATABASE_NAME = 'keys';
 
 class Database {
-  static async getCollection(collectionName) {
-    const url = process.env.MONGO_URL;
-    const client = await mongo.connect(url, {
+  constructor() {
+    this.mongoUrl = process.env.MONGO_URL;
+  }
+
+  async setClient() {
+    this.client = await mongo.connect(this.mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true
-    })
+    });
+  }
+
+  static async getInstance() {
+    if (!Database.instance) {
+      Database.instance = new Database();
+      await Database.instance.setClient();
+    }
+    return Database.instance;
+  }
+
+  static async getCollection(collectionName) {
+    const client = (await Database.getInstance()).client;
 
     const database = client.db(DATABASE_NAME);
 
