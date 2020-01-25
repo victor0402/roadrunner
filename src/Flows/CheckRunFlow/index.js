@@ -7,20 +7,18 @@ class CheckRunFlow {
     const branchName = branches[0].name;
     const repositoryName = repository.name;
 
-    const currentCheckrun = await new CheckRun({ commitSha: sha, state })
+    const currentCheckrun = new CheckRun({ commitSha: sha, state })
     await currentCheckrun.createOrLoadByCommitSha();
 
     // Add sort by to get the latest
     const pr = await PullRequest.findBy({ branchName, repositoryName, state: 'open' });
 
     if (!pr) {
-
-      console.log('No PR found', { branchName, repositoryName, state: 'open' });
       console.log('Flow aborted!')
       return;
     }
 
-    const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
+    const mainSlackMessage = await pr.getMainSlackMessage();
     if (!mainSlackMessage) {
       console.log('Flow aborted!')
       return;
@@ -42,7 +40,6 @@ class CheckRunFlow {
   };
 
   static async isFlow(json) {
-    console.log(json.state)
     return json.commit && (json.state === 'success' || json.state === 'failure' || json.state === 'pending');
   };
 }

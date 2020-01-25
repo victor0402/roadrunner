@@ -1,19 +1,7 @@
-import { BaseModel, PullRequest } from '@models';
+import { BaseModel } from '@models';
 
 class Commit extends BaseModel {
   static collectionName = 'commits';
-
-  async getPullRequest() {
-    return await PullRequest.findById(this.prId)
-  }
-
-  static async findBySha(sha) {
-    return await BaseModel.findBy({ sha });
-  }
-
-  static async findByPRId(prId) {
-    return await BaseModel.findBy({ prId });
-  }
 
   toJson() {
     return {

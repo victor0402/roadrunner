@@ -6,7 +6,7 @@ class ClosePullRequestFlow {
   static async start(json) {
     const pr = await new PullRequest(pullRequestParser.parse(json)).load();
 
-    const mainSlackMessage = await SlackMessage.findByPRId(pr.id);
+    const mainSlackMessage = await pr.getMainSlackMessage();
     if (!mainSlackMessage) {
       console.log('Flow aborted!')
       return;

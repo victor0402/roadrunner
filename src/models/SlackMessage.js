@@ -1,36 +1,17 @@
-import Database from '@services/Database';
+import { BaseModel } from '@models';
 
-const collectionName = 'slackMessages';
+class SlackMessage extends BaseModel {
+  static collectionName = 'slackMessages';
 
-// @TODO: refactor to use BaseModel
-class SlackMessage {
-  constructor(prId, ts) {
-    this.prId = prId;
-    this.ts = ts;
+  static async findByPRId(prId) {
+    return await SlackMessage.findBy({ prId });
   }
 
-  async create() {
-    const collection = await Database.getCollection(collectionName);
-
-    const slackMessage = await collection.insertOne({
+  toJson() {
+    return {
       prId: this.prId,
       ts: this.ts,
-    });
-
-    this.id = slackMessage.ops[0]._id
-  }
-
-  static async DatabaseyPRId(prId) {
-    const collection = await Database.getCollection(collectionName);
-    const result = await collection.findOne({
-      prId
-    });
-
-    if (!result) {
-      console.log("Couldn't find Slack message for ts: ", prId);
-      return null;
-    }
-    return new SlackMessage(result.prId, result.ts)
+    };
   }
 };
 

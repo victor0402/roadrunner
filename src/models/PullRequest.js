@@ -1,4 +1,3 @@
-import mongodb from 'mongodb';
 import Database from '@services/Database';
 import { BaseModel, SlackMessage, PullRequestReview } from '@models';
 

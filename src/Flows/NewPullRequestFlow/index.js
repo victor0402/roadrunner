@@ -15,7 +15,7 @@ class NewPullRequestFlow {
 
     const ts = await (new ChannelMessage(channel)).requestReview(devGroup, pr.link)
 
-    const slackMessage = new SlackMessage(pr.id, ts)
+    const slackMessage = new SlackMessage({ prId: pr.id, ts })
     slackMessage.create()
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName);
@@ -38,7 +38,6 @@ class NewPullRequestFlow {
     const commitsShas = ghCommits.map(c => c.sha);
     const lastCheckRun = await CheckRun.findLastStateForCommits(commitsShas);
     const lastCheckRunState = lastCheckRun ? lastCheckRun.state : null;
-
 
     const reactji = new Reactji(ts, lastCheckRunState, channel, 'ci', 'pending')
 

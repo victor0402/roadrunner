@@ -1,11 +1,12 @@
-import Database from '@services/Database'
 import { BaseModel } from '@models';
 
 class CheckRun extends BaseModel {
   static collectionName = 'checkRuns';
 
   async createOrLoadByCommitSha() {
-    const checkRun = await CheckRun.findByCommitSha(this.commitSha);
+    const checkRun = await CheckRun.findBy({
+      commitSha: this.commitSha,
+    });
 
     if (checkRun) {
       checkRun.state = this.state;
@@ -16,30 +17,23 @@ class CheckRun extends BaseModel {
     return await this.create()
   }
 
-  static async findByCommitSha(commitSha) {
-    return await BaseModel.findBy({ commitSha })
-  };
-
   static async findLastStateForCommits(commitsSha) {
-    const collection = await Database.getCollection(CheckRun.collectionName);
     const query = commitsSha.map(s => ({ commitSha: s }))
-
-    const response = await collection.find({ $or: query })
-    let array = await response.toArray();
-    if (array.length === 0) {
+    let checkRuns = await CheckRun.list({ $or: query })
+    if (checkRuns.length === 0) {
       return null;
     }
+    checkRuns = checkRuns.sort((a, b) => b.createdAt - a.createdAt)
 
-    array = array.sort((a, b) => b.createdAt - a.createdAt)
-    const checkRun = array[0];
 
-    return new CheckRun({ ...checkRun, id: checkRun._id });
+    return checkRuns[0];
   };
 
   toJson() {
     return {
       state: this.state,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+      commitSha: this.commitSha
     };
   }
 };
