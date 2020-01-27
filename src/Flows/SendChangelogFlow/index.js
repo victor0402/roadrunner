@@ -16,7 +16,7 @@ class SendChangelogFlow {
       return;
     }
 
-    const ghCommits = await GitHub.getCommits(pr.ghId, pr.owner, pr.repositoryName)
+    const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName)
     //    let commits = await Promise.all(ghCommits.map(async c => Commit.findBySha(c.sha)))
     //    commits = commits.filter(c => c)
     //

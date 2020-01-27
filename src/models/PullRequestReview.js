@@ -3,6 +3,10 @@ import { BaseModel } from '@models';
 class PullRequestReview extends BaseModel {
   static collectionName = 'pullRequestsReviews';
 
+  static async findByPRId(prId) {
+    return await PullRequestReview.list({ prId });
+  }
+
   async createOrLoadByUsernameAndPR() {
     const pullRequestReview = await PullRequestReview.findBy({ prId: this.prId, username: this.username });
 
