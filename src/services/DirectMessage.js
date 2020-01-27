@@ -8,14 +8,19 @@ class DirectMessage {
   }
 
   async notifyCIFailure(pr) {
-    const message = `${SlackReaction.rotating_light.forMessage()} CI Failed for PR: ${pr.link}`
+    const message = `${SlackReaction.rotating_light.forMessage()} CI Failed for Pull Request: ${pr.link}`
+    return await this.send(message)
+  }
+
+  async notifyPRMerge(pr) {
+    const message = `${SlackReaction.merge.forMessage()} Pull Request closed: ${pr.link}`
     return await this.send(message)
   }
 
   async send(message) {
     return await Slack.sendDirectMessage({
       message,
-      slackUsername: SlackRepository.getSlackUser(pr.ghUsername),
+      slackUsername: SlackRepository.getSlackUser(this.ghUsername),
     });
   }
 }

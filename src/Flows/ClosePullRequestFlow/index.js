@@ -1,4 +1,4 @@
-import { SlackRepository, Reactji, Github, ChannelMessage } from '@services'
+import { SlackRepository, Reactji, Github, ChannelMessage, DirectMessage } from '@services'
 import { PullRequest, Commit } from '@models';
 import pullRequestParser from '../../parsers/pullRequestParser'
 
@@ -39,6 +39,9 @@ class ClosePullRequestFlow {
 
     const reactji = new Reactji(mainSlackMessage.ts, 'closed', channel, 'flow')
     reactji.react(true);
+
+    const directMessage = new DirectMessage(pr.username)
+    directMessage.notifyPRMerge(pr)
   };
 
   static async isFlow(json) {

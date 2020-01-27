@@ -50,7 +50,6 @@ class Slack {
 
   static async updateMessage({ message, slackChannel, threadID }) {
     const token = process.env.SLACK_API_KEY;
-    console.log('updating', message)
 
     const slackClient = new SlackApi.WebClient(token);
 
@@ -60,7 +59,6 @@ class Slack {
 
     let channels = response.channels.sort((a, b) => a.created < b.created)
     const channel = channels.find(c => c.name === slackChannel)
-    console.log(channel, threadID)
 
     await slackClient.chat.update({
       channel: channel.id,

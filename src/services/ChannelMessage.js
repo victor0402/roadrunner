@@ -42,7 +42,6 @@ class ChannelMessage {
   }
 
   async update(message) {
-    console.log(this)
     return await Slack.updateMessage({
       message,
       slackChannel: this.channel,
