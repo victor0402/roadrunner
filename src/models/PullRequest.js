@@ -5,7 +5,7 @@ class PullRequest extends BaseModel {
   static collectionName = 'pullRequests';
 
   isDeployPR() {
-    return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && (this.branchName === 'develop' || this.branchName === 'qa')
+    return (this.baseBranchName === 'qa' || this.baseBranchName === 'master') && (this.branchName === 'develop' || this.branchName === 'qa' || this.branchName === 'dev')
   }
 
   isClosed() {
