@@ -64,8 +64,8 @@ const getPullRequestsJSON = async (prs) => {
       title: pr.title,
       link: pr.link,
       ci_state: pr.ciState,
-      approved_by: approvedReviews.map(r => r.username),
-      reproved_by: reprovedReviews.map(r => r.username),
+      approved_by: approvedReviews.map(r => SlackRepository.getSlackUser(r.username)),
+      reproved_by: reprovedReviews.map(r => SlackRepository.getSlackUser(r.username)),
     }
   })
 }
