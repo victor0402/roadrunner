@@ -76,12 +76,23 @@ const getPullRequestsJSON = async (prs) => {
 
     const changesAfterLastReview =  hasReviewComparison ? (latestReview.updatedAt || latestReview.createdAt) < latestChange.createdAt : false
 
+    const approvedByList = approvedReviews.map(r => SlackRepository.getSlackUser(r.username));
+    const repprovedByList = reprovedReviews.map(r => SlackRepository.getSlackUser(r.username));
+
+    const getListOrFirst = (list) => {
+      if (list.length > 1) {
+        return list;
+      } else if(list.length === 1) {
+        return list[0]
+      } 
+    }
+
     return {
       title: pr.title,
       link: pr.link,
       ci_state: pr.ciState ?  pr.ciState : 'unavailable',
-      approved_by: approvedReviews.map(r => SlackRepository.getSlackUser(r.username)),
-      reproved_by: reprovedReviews.map(r => SlackRepository.getSlackUser(r.username)),
+      approved_by: getListOrFirst(approvedByList),
+      reproved_by: getListOrFirst(repprovedByList),
       new_changes_after_last_review: changesAfterLastReview,
     }
   })
