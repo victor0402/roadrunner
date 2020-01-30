@@ -74,10 +74,9 @@ const getPullRequestsJSON = async (prs) => {
 
     const hasReviewComparison = latestReview && latestChange 
 
-    const changesAfterLastReview =  hasReviewComparison ? latestReview.updatedAt || latestReview.createdAt < latestChange.createdAt : false
+    const changesAfterLastReview =  hasReviewComparison ? (latestReview.updatedAt || latestReview.createdAt) < latestChange.createdAt : false
 
     return {
-      id: pr.id,
       title: pr.title,
       link: pr.link,
       ci_state: pr.ciState,
