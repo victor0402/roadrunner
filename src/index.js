@@ -79,7 +79,7 @@ const getPullRequestsJSON = async (prs) => {
     return {
       title: pr.title,
       link: pr.link,
-      ci_state: pr.ciState,
+      ci_state: pr.ciState ?  pr.ciState : 'unavailable',
       approved_by: approvedReviews.map(r => SlackRepository.getSlackUser(r.username)),
       reproved_by: reprovedReviews.map(r => SlackRepository.getSlackUser(r.username)),
       new_changes_after_last_review: changesAfterLastReview,
