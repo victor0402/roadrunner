@@ -23,9 +23,14 @@ class Database {
   }
 
   static async getCollection(collectionName) {
-    const client = (await Database.getInstance()).client;
+    const instance = await Database.getInstance()
+    const client = instance.client;
 
-    const database = client.db(DATABASE_NAME);
+    try {
+      const database = client.db(DATABASE_NAME);
+    } catch (e) {
+      console.log('Database error!', collectionName)
+    }
 
     return database.collection(collectionName)
   }

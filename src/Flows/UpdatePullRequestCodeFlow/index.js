@@ -1,5 +1,5 @@
 import { SlackRepository, ChannelMessage } from '@services'
-import { PullRequest } from '@models';
+import { PullRequest, PullRequestChange } from '@models';
 import pushChangeParser from '../../parsers/pushChangeParser'
 
 class UpdatePullRequestCodeFlow {
@@ -19,6 +19,12 @@ class UpdatePullRequestCodeFlow {
       console.log('Flow aborted!')
       return;
     }
+
+    const prChange = new PullRequestChange({
+      prId: pr.id,
+    })
+    await prChange.create()
+
 
     const slackThreadTS = mainSlackMessage.ts;
 

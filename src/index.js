@@ -52,20 +52,38 @@ app.get('/', async (req, res) => {
 
 const getPullRequestsJSON = async (prs) => {
   prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
-  //  prs = prs.filter(pr => pr.id === '5e2a59210b72038460276690')
-  await Promise.all(prs.map(pr => {
-    return pr.getReviews();
-  }))
+
+ // prs = [prs[prs.length -1]]
+ // prs = prs.filter(pr => pr.id === '5e1a46fa7afaf493c222cb87')
+
+  await Promise.all(prs.map(pr => pr.getReviews()));
+
+  await Promise.all(prs.map(pr => pr.getChanges()));
+
   return prs.map(pr => {
     const approvedReviews = pr.reviews.filter(r => r.state === 'approved')
     const reprovedReviews = pr.reviews.filter(r => r.state === 'changes_requested')
 
+    const sortedReviews = pr.reviews.sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
+
+    const sortedChanges = pr.changes.sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
+
+    const latestChange = sortedChanges.length > 0 ? pr.changes[0] : undefined;
+
+    const latestReview = sortedReviews.length > 0 ? sortedReviews[0] : undefined
+
+    const hasReviewComparison = latestReview && latestChange 
+
+    const changesAfterLastReview =  hasReviewComparison ? latestReview.updatedAt || latestReview.createdAt < latestChange.createdAt : false
+
     return {
+      id: pr.id,
       title: pr.title,
       link: pr.link,
       ci_state: pr.ciState,
       approved_by: approvedReviews.map(r => SlackRepository.getSlackUser(r.username)),
       reproved_by: reprovedReviews.map(r => SlackRepository.getSlackUser(r.username)),
+      new_changes_after_last_review: changesAfterLastReview,
     }
   })
 }

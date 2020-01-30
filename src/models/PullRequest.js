@@ -1,5 +1,5 @@
 import Database from '@services/Database';
-import { BaseModel, SlackMessage, PullRequestReview } from '@models';
+import { BaseModel, SlackMessage, PullRequestReview, PullRequestChange } from '@models';
 
 class PullRequest extends BaseModel {
   static collectionName = 'pullRequests';
@@ -20,6 +20,11 @@ class PullRequest extends BaseModel {
   async getReviews() {
     this.reviews = await PullRequestReview.findByPRId(this.id)
     return this.reviews;
+  }
+
+  async getChanges() {
+    this.changes = await PullRequestChange.findByPRId(this.id)
+    return this.changes;
   }
 
   async close() {
