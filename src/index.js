@@ -93,7 +93,7 @@ const getPullRequestsJSON = async (prs) => {
       ci_state: pr.ciState ?  pr.ciState : 'unavailable',
       approved_by: getListOrFirst(approvedByList),
       reproved_by: getListOrFirst(repprovedByList),
-      new_changes_after_last_review: changesAfterLastReview,
+      new_changes_after_last_review: changesAfterLastReview || undefined,
     }
   })
 }
