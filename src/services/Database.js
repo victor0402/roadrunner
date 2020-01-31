@@ -23,7 +23,8 @@ class Database {
   }
 
   static async getCollection(collectionName) {
-    const client = (await Database.getInstance()).client;
+    const instance = await Database.getInstance();
+    const client = await instance.client;
     const database = client.db(DATABASE_NAME);
 
     return database.collection(collectionName)

@@ -64,17 +64,18 @@ const getPullRequestsJSON = async (prs) => {
     const approvedReviews = pr.reviews.filter(r => r.state === 'approved')
     const reprovedReviews = pr.reviews.filter(r => r.state === 'changes_requested')
 
-    const sortedReviews = pr.reviews.sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
 
     const sortedChanges = pr.changes.sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
 
     const latestChange = sortedChanges.length > 0 ? pr.changes[0] : undefined;
 
-    const latestReview = sortedReviews.length > 0 ? sortedReviews[0] : undefined
+    const reviews = pr.reviews;
 
-    const hasReviewComparison = latestReview && latestChange 
+    const outdatedReviews = reviews.filter((r) => {
+      return (r.updatedAt || r.createdAt) < (latestChange || {}).createdAt
+    });
 
-    const changesAfterLastReview =  hasReviewComparison ? (latestReview.updatedAt || latestReview.createdAt) < latestChange.createdAt : false
+    const outdatedReviewsUsernames = outdatedReviews.map(a => a.username);
 
     const approvedByList = approvedReviews.map(r => SlackRepository.getSlackUser(r.username));
     const repprovedByList = reprovedReviews.map(r => SlackRepository.getSlackUser(r.username));
@@ -93,7 +94,7 @@ const getPullRequestsJSON = async (prs) => {
       ci_state: pr.ciState ?  pr.ciState : 'unavailable',
       approved_by: getListOrFirst(approvedByList),
       reproved_by: getListOrFirst(repprovedByList),
-      new_changes_after_last_review: changesAfterLastReview || undefined,
+      new_changes_after_last_review_of: getListOrFirst(outdatedReviewsUsernames)
     }
   })
 }
