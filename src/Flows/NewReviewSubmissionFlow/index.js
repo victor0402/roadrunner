@@ -1,4 +1,4 @@
-import { SlackRepository, ChannelMessage } from '@services'
+import { SlackRepository, ChannelMessage, Github, DirectMessage } from '@services'
 import { PullRequestReview, PullRequest } from '@models';
 import pullRequestParser from '../../parsers/pullRequestParser'
 
@@ -19,7 +19,7 @@ class NewReviewSubmissionFlow {
     const mainSlackMessage = await pr.getMainSlackMessage();
 
     if (!mainSlackMessage) {
-      console.log('Flow aborted!')
+      console.log('Flow aborted!', 'no message found')
       return;
     }
 
@@ -39,8 +39,16 @@ class NewReviewSubmissionFlow {
     } else if (message !== '') {
       channelMessage.notifyNewMessage();
     } else {
-      console.log('No slack message was set!')
-      console.log('Flow aborted!')
+      const ghPR = await Github.getPullRequest({
+        owner: pr.owner,
+        repository: pr.repositoryName,
+        pullRequestId: pr.ghId
+      })
+
+      if (!ghPR.mergeable && ghPR.mergeable_state === 'dirty') {
+        const directMessage = new DirectMessage(pr.username)
+        directMessage.notifyPRConflicts(pr)
+      }
     }
   };
 

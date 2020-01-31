@@ -13,6 +13,19 @@ class Github {
 
     return commits.data;
   }
+
+  static async getPullRequest({pullRequestId, owner, repository}) {
+    const octokit = new Octokit({
+      auth: process.env.GIT_AUTH
+    });
+    const commits = await octokit.pulls.get({
+      owner,
+      repo: repository,
+      pull_number: pullRequestId
+    })
+
+    return commits.data;
+  }
 }
 
 export default Github;

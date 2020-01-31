@@ -6,6 +6,7 @@ class SlackReaction {
   static warning = new SlackReaction('warning')
   static speech_balloon = new SlackReaction('speech_balloon')
   static pencil = new SlackReaction('pencil2')
+  static boom = new SlackReaction('boom')
 
   constructor(name) {
     this.name = name;
@@ -27,7 +28,8 @@ class SlackReaction {
       this.merge.simple(),
       this.warning.simple(),
       this.speech_balloon.simple(),
-      this.pencil.simple()
+      this.pencil.simple(),
+      this.boom.simple()
     ]
   }
 

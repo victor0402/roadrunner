@@ -7,6 +7,11 @@ class DirectMessage {
     this.ghUsername = ghUsername;
   }
 
+  async notifyPRConflicts(pr) {
+    const message = `${SlackReaction.boom.forMessage()} there are conflicts on this Pull Request: ${pr.link}`
+    return await this.send(message)
+  }
+
   async notifyCIFailure(pr) {
     const message = `${SlackReaction.rotating_light.forMessage()} CI Failed for Pull Request: ${pr.link}`
     return await this.send(message)
