@@ -1,12 +1,14 @@
-import SlackApi from '@slack/web-api';
 import SlackReaction from '@enums/SlackReaction';
 import axios from 'axios';
 
+const getUrl = (path) => {
+  const SLACK_API_URL = process.env.SLACK_API_URL;
+  return `${SLACK_API_URL}/${path}`;
+};
+
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {
-    const SLACK_API_URL = process.env.SLACK_API_URL;
-
-    const res = await axios.post(`${SLACK_API_URL}/direct-message`, {
+    const res = await axios.post(getUrl('direct-messages'), {
       message,
       username: slackUsername,
       bot: 'roadrunner'
@@ -16,9 +18,7 @@ class Slack {
   };
 
   static async sendMessage({ message, slackChannel, threadID }) {
-    const SLACK_API_URL = process.env.SLACK_API_URL;
-
-    const res = await axios.post(`${SLACK_API_URL}/channel-message`, {
+    const res = await axios.post(getUrl('channel-messages'), {
       message,
       channel: slackChannel,
       ts: threadID,
@@ -29,9 +29,7 @@ class Slack {
   };
 
   static async updateMessage({ message, slackChannel, threadID }) {
-    const SLACK_API_URL = process.env.SLACK_API_URL;
-
-    const res = await axios.patch(`${SLACK_API_URL}/channel-message`, {
+    const res = await axios.patch(getUrl('channel-messages'), {
       message,
       channel: slackChannel,
       ts: threadID,
@@ -42,9 +40,7 @@ class Slack {
   };
 
   static async sendReaction({ slackChannel, reaction, messageTs }) {
-    const SLACK_API_URL = process.env.SLACK_API_URL;
-
-    const res = await axios.post(`${SLACK_API_URL}/reactions`, {
+    const res = await axios.post(getUrl('reactions'), {
       channel: slackChannel,
       reaction,
       ts: messageTs,
@@ -72,9 +68,7 @@ class Slack {
   };
 
   static async removeReaction({ slackChannel, reaction, messageTs }) {
-    const SLACK_API_URL = process.env.SLACK_API_URL;
-
-    const res = await axios.post(`${SLACK_API_URL}/reactions/delete`, {
+    const res = await axios.post(getUrl('reactions/delete'), {
       channel: slackChannel,
       reaction,
       ts: messageTs,
