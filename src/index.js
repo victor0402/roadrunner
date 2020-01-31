@@ -51,7 +51,7 @@ app.get('/', async (req, res) => {
 })
 
 const getPullRequestsJSON = async (prs) => {
-  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
+//  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
 
  // prs = [prs[prs.length -1]]
  // prs = prs.filter(pr => pr.id === '5e1a46fa7afaf493c222cb87')
@@ -115,7 +115,7 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 })
 
 app.get('/open-prs', async (req, res) => {
-  let prs = await PullRequest.list({ state: 'open' })
+  let prs = await PullRequest.list({repositoryName: {$ne: 'gh-hooks-repo-test'}, state: 'open' })
   const data = await getPullRequestsJSON(prs);
 
   res.send({
