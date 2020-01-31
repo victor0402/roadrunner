@@ -40,24 +40,16 @@ class Slack {
   };
 
   static async updateMessage({ message, slackChannel, threadID }) {
-    const token = process.env.SLACK_API_KEY;
+    const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const slackClient = new SlackApi.WebClient(token);
-
-    const response = await slackClient.channels.list({
-      limit: 500
-    });
-
-    let channels = response.channels.sort((a, b) => a.created < b.created)
-    const channel = channels.find(c => c.name === slackChannel)
-
-    await slackClient.chat.update({
-      channel: channel.id,
-      text: message,
+    const res = await axios.patch(`${SLACK_API_URL}/channel-message`, {
+      message,
+      channel: slackChannel,
       ts: threadID,
-      unfurl_links: false,
-      parse: 'full'
+      bot: 'roadrunner'
     });
+
+    return res.data.ts;
   };
 
   static async sendReaction({ slackChannel, reaction, messageTs }) {
