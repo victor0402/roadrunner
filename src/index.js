@@ -15,7 +15,6 @@ import newChangeJson from './payload-examples/newPush.json';
 import submitReviewChangesApproved from './payload-examples/submitReviewChangesApproved.json';
 import submitReviewChangesRequested from './payload-examples/submitReviewChangesRequested.json';
 
-
 const app = express()
 app.use(bodyParser.json());
 

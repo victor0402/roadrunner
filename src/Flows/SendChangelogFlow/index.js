@@ -17,25 +17,14 @@ class SendChangelogFlow {
     }
 
     const ghCommits = await Github.getCommits(pr.ghId, pr.owner, pr.repositoryName)
-    //    let commits = await Promise.all(ghCommits.map(async c => Commit.findBySha(c.sha)))
-    //    commits = commits.filter(c => c)
-    //
-    //    let pullRequests = (await Promise.all(commits.map(async commit => {
-    //      return await commit.getPullRequest();
-    //    }))).filter(p => p);
-    //
-    //    // Remove duplicates
-    //    pullRequests = Object.values(pullRequests.reduce((acc, cur) => Object.assign(acc, { [cur.id]: cur }), {}))
-    //
-    //    if (pullRequests.length === 0) {
-    //      console.log("We couldn't find any pull requests on our database for this release", pr);
-    //      console.log('Flow aborted!')
-    //      return;
-    //    }
+    let slackMessage = "*Changelog*:"
+    const validCommits = ghCommits.filter(ghCommit => {
+      const { commit } = ghCommit;
+      const { message } = commit;
+      return !message.startsWith('Merge');
+    })
 
-    let slackMessage = "*Experimental* Changelog:"
-
-    ghCommits.forEach(ghCommit => {
+    validCommits.forEach(ghCommit => {
       const { commit } = ghCommit;
       const { message } = commit;
 
