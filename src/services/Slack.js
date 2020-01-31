@@ -42,23 +42,16 @@ class Slack {
   };
 
   static async sendReaction({ slackChannel, reaction, messageTs }) {
-    const token = process.env.SLACK_API_KEY;
-    const slackClient = new SlackApi.WebClient(token);
+    const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const response = await slackClient.channels.list({
-      limit: 500
-    });
+    const res = await axios.post(`${SLACK_API_URL}/reactions`, {
+      channel: slackChannel,
+      reaction,
+      ts: messageTs,
+      bot: 'roadrunner'
+    })
 
-    let channels = response.channels.sort((a, b) => a.created < b.created)
-    const channel = channels.find(c => c.name === slackChannel)
-
-    const t = {
-      channel: channel.id,
-      name: reaction,
-      timestamp: messageTs
-    };
-
-    await slackClient.reactions.add(t);
+    return res.data;
   };
 
   static async toggleReaction({ slackChannel, reaction, messageTs }) {
@@ -79,25 +72,16 @@ class Slack {
   };
 
   static async removeReaction({ slackChannel, reaction, messageTs }) {
-    const token = process.env.SLACK_API_KEY;
-    const slackClient = new SlackApi.WebClient(token);
+    const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const response = await slackClient.channels.list({
-      limit: 500
-    });
+    const res = await axios.delete(`${SLACK_API_URL}/reactions`, {
+      channel: slackChannel,
+      reaction,
+      ts: messageTs,
+      bot: 'roadrunner'
+    })
 
-    let channels = response.channels.sort((a, b) => a.created < b.created)
-    const channel = channels.find(c => c.name === slackChannel)
-
-    const t = {
-      channel: channel.id,
-      name: reaction,
-      timestamp: messageTs
-    };
-
-    try {
-      await slackClient.reactions.remove(t);
-    } catch (err) { }
+    return res.data;
   };
 }
 
