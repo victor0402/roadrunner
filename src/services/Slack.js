@@ -74,7 +74,7 @@ class Slack {
   static async removeReaction({ slackChannel, reaction, messageTs }) {
     const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const res = await axios.delete(`${SLACK_API_URL}/reactions`, {
+    const res = await axios.post(`${SLACK_API_URL}/reactions/delete`, {
       channel: slackChannel,
       reaction,
       ts: messageTs,
