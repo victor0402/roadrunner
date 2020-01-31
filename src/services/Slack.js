@@ -1,5 +1,6 @@
 import SlackApi from '@slack/web-api';
 import SlackReaction from '@enums/SlackReaction';
+import axios from 'axios';
 
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {
@@ -25,27 +26,17 @@ class Slack {
     return res.ts;
   };
 
-  static async sendMessage({ message, slackChannel, prId, threadID }) {
-    const token = process.env.SLACK_API_KEY;
+  static async sendMessage({ message, slackChannel, threadID }) {
+    const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const slackClient = new SlackApi.WebClient(token);
+    const res = await axios.post(`${SLACK_API_URL}/channel-message`, {
+      message,
+      channel: slackChannel,
+      ts: threadID,
+      bot: 'roadrunner'
+    })
 
-    const response = await slackClient.channels.list({
-      limit: 500
-    });
-
-    let channels = response.channels.sort((a, b) => a.created < b.created)
-    const channel = channels.find(c => c.name === slackChannel)
-
-    const res = await slackClient.chat.postMessage({
-      channel: channel.id,
-      text: message,
-      thread_ts: threadID,
-      unfurl_links: false,
-      parse: 'full'
-    });
-
-    return res.ts;
+    return res.data.ts;
   };
 
   static async updateMessage({ message, slackChannel, threadID }) {
