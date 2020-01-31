@@ -4,26 +4,15 @@ import axios from 'axios';
 
 class Slack {
   static async sendDirectMessage({ message, slackUsername }) {
-    const token = process.env.SLACK_API_KEY;
+    const SLACK_API_URL = process.env.SLACK_API_URL;
 
-    const slackClient = new SlackApi.WebClient(token);
+    const res = await axios.post(`${SLACK_API_URL}/direct-message`, {
+      message,
+      username: slackUsername,
+      bot: 'roadrunner'
+    })
 
-    const usersList = await slackClient.users.list({
-      limit:  1000
-    });
-    const members = usersList.members
-
-    const user = members.find(s => s.name === slackUsername)
-
-    const res = await slackClient.chat.postMessage({
-      channel: user.id,
-      text: message,
-      unfurl_links: false,
-      parse: 'full',
-      as_user: true
-    });
-
-    return res.ts;
+    return res.data.ts;
   };
 
   static async sendMessage({ message, slackChannel, threadID }) {
