@@ -23,9 +23,9 @@ class DirectMessage {
   }
 
   async send(message) {
-    return await Slack.sendDirectMessage({
+    return await Slack.getInstance().sendDirectMessage({
       message,
-      slackUsername: SlackRepository.getSlackUser(this.ghUsername),
+      username: SlackRepository.getSlackUser(this.ghUsername),
     });
   }
 }
