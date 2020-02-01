@@ -25,7 +25,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.4.1",
-    "slack-notifications-client": "git@github.com:codelittinc/slack-notifications-client.git"
+    "slack-notifications-client": "git://github.com:codelittinc/slack-notifications-client.git"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
