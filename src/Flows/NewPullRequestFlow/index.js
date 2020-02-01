@@ -13,7 +13,7 @@ class NewPullRequestFlow {
 
     await pr.create()
 
-    const ts = await (new ChannelMessage(channel)).requestReview(devGroup, pr.link)
+    const { ts } = await (new ChannelMessage(channel)).requestReview(devGroup, pr.link)
 
     const slackMessage = new SlackMessage({ prId: pr.id, ts })
     slackMessage.create()

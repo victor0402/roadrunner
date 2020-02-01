@@ -21,12 +21,10 @@ class Reactji {
     const reactionKey = `${this.type}${this.state[0].toUpperCase()}${this.state.slice(1)}`
     const reaction = STATES[reactionKey]
 
-    const sendFn = Slack.sendReaction;
-
-    sendFn({
-      slackChannel: this.channel,
+    Slack.getInstance().sendReaction({
+      channel: this.channel,
       reaction,
-      messageTs: this.ts
+      ts: this.ts
     });
   }
 }

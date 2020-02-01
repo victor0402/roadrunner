@@ -35,7 +35,7 @@ class ChannelMessage {
   async send(message) {
     return await Slack.getInstance().sendMessage({
       message,
-      slackChannel: this.channel,
+      channel: this.channel,
       ts: this.ts
     });
   }
