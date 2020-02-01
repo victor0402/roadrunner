@@ -5,8 +5,8 @@ class Slack {
     if (!Slack.client) {
       Slack.client = new SlackNotificationsClient({
         bot: 'roadrunner',
-        apiKey: 'no-key',
         apiURI: process.env.SLACK_API_URL,
+        apiKey: process.env.SLACK_API_KEY,
       });
     }
 
