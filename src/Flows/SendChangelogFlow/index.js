@@ -30,7 +30,7 @@ class SendChangelogFlow {
       slackMessage = `${slackMessage} \n - ${message}`
     })
 
-    Slack.sendMessage({
+    Slack.getInstance().sendMessage({
       message: slackMessage,
       slackChannel: deployChannel,
     });
