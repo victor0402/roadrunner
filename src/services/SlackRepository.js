@@ -77,13 +77,15 @@ const ghToSlackUsers = {
   raphaelsattler: 'raphael.sattler',
   tolastarras: 'rafael.sobrino',
   victor0402: 'victor.carvalho'
-}
+};
 
 const getRepositoryData = (repositoryName) => repositoriesIdentifiers[repositoryName];
 const getSlackUser = (ghUser) => ghToSlackUsers[ghUser.toLowerCase()]
+const getAdminSlackUser = () => 'kaiomagalhaes';
 
 export default {
   getRepositoryData,
   data: repositoriesIdentifiers,
-  getSlackUser
-}
+  getSlackUser,
+  getAdminSlackUser
+};

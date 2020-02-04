@@ -4,6 +4,7 @@ import UpdatePullRequestCodeFlow from './UpdatePullRequestCodeFlow';
 import NewReviewSubmissionFlow from './NewReviewSubmissionFlow';
 import SendChangelogFlow from './SendChangelogFlow';
 import CheckRunFlow from './CheckRunFlow';
+import ReleaseFlow from './ReleaseFlow';
 
 const getFlow = async (json) => {
   if (await NewPullRequestFlow.isFlow(json)) {
@@ -18,6 +19,8 @@ const getFlow = async (json) => {
     return SendChangelogFlow;
   } else if (await CheckRunFlow.isFlow(json)) {
     return CheckRunFlow;
+  } else if (await ReleaseFlow.isFlow(json)) {
+    return ReleaseFlow;
   }
 }
 
