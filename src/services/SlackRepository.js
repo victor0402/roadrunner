@@ -57,11 +57,6 @@ const repositoriesIdentifiers = {
     devGroup: '@ay-devs',
     channel: 'team-ay-dev'
   },
-  'team-maker': {
-    devGroup: '@team-maker-devs',
-    channel: 'team-teammaker-dev',
-    deployChannel: 'team-teammaker-deploy'
-  },
 }
 
 const ghToSlackUsers = {
