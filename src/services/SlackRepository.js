@@ -67,7 +67,8 @@ const repositoriesIdentifiers = {
     devGroup: '@ay-devs',
     channel: 'team-ay-pia-dev',
     deployChannel: 'team-ay-pia-deploy',
-    owner: 'codelittinc'
+    owner: 'codelittinc',
+    supports_deploy: true
   },
   'ay-users-api': {
     devGroup: '@ay-devs',
