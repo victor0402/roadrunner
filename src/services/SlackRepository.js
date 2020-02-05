@@ -75,6 +75,14 @@ const repositoriesIdentifiers = {
     channel: 'team-ay-dev',
     owner: 'codelittinc'
   },
+  'blog-v2': {
+    devGroup: '@website-devs',
+    channel: 'team-website-dev',
+    deployChannel: 'team-blog-deploy',
+    owner: 'codelittinc',
+    supports_deploy: false,
+    servers: ['dev-codelitt-blog']
+  },
 }
 
 const ghToSlackUsers = {
