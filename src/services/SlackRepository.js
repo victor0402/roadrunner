@@ -35,7 +35,8 @@ const repositoriesIdentifiers = {
     channel: 'team-zonda-dev',
     deployChannel: 'wg-zonda-deploy',
     owner: 'codelittinc',
-    servers: ['dev-zonda', 'qa-zonda', 'prod-zonda']
+    servers: ['dev-zonda', 'qa-zonda', 'prod-zonda'],
+    supports_deploy: true,
   },
   'ay-design-library': {
     devGroup: '@ay-devs',
