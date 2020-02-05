@@ -16,8 +16,17 @@ const config = {
 class ReleaseFlow {
   static async start(json) {
     const { channel_name, text, user_name } = json;
+    if (text === 'update prod') {
+      return
+    }
+
     const repositoryData = SlackRepository.getRepositoryDataByDeployChannel(channel_name);
     const { deployChannel, owner, repository } = repositoryData;
+
+    Slack.getInstance().sendMessage({
+      message: `Deployment process started by @${json.user_name}`,
+      channel: deployChannel
+    });
 
     const [event, environment] = text.split(' ');
 
@@ -44,7 +53,11 @@ class ReleaseFlow {
 
     if (pullRequestCreationError) {
       if (pullRequestCreationError === 'No commits between qa and develop') {
-        return "The server already has the latest updates";
+        Slack.getInstance().sendMessage({
+          message: "The server already has the latest updates",
+          channel: deployChannel
+        });
+        return
       } else {
         const message = `${pullRequestCreationError} - ${JSON.stringify(json)}`;
         Slack.getInstance().sendDirectMessage({
@@ -52,10 +65,12 @@ class ReleaseFlow {
           username: SlackRepository.getAdminSlackUser()
         });
 
-        return "There was an error with the deployment. I've notified @kaio and he will reach out to you soon.";
+        Slack.getInstance().sendMessage({
+          message: `There was an error with the deployment. Hey @kaio can you do something about it? Thank you.`,
+          channel: deployChannel
+        });
+        return
       }
-
-      return;
     }
 
     const { number } = pullRequest;
@@ -82,15 +97,12 @@ class ReleaseFlow {
         username: SlackRepository.getAdminSlackUser()
       });
 
-      return "There was an error with the deployment. I've notified @kaio and he will reach out to you soon.";
-    } else {
       Slack.getInstance().sendMessage({
-        message: `The deployment was started by @${user_name}, it will be done is a few minutes.`,
+        message: `There was an error with the deployment. Hey @kaio can you do something about it? Thank you.`,
         channel: deployChannel
       });
-
-      return "OK";
-    };
+      return;
+    }
   };
 
   static async isFlow(json) {

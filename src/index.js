@@ -198,8 +198,29 @@ app.post('/deploy', async (req, res) => {
 
   const flowName = Flow.name;
   console.log(`Start: ${flowName}`)
-  const response = await Flow.start(json)
-  console.log(`End: ${flowName}`)
+  const repositoryData = SlackRepository.getRepositoryDataByDeployChannel(json.channel_name);
+  let message;
+
+  let stop;
+  if (repositoryData && repositoryData.supports_deploy) {
+    message = 'ok';
+  } else {
+    message = "This channel doesn't support automatic deploys";
+    stop = true;
+  }
+
+  if (json.text !== 'update qa') {
+    stop = true;
+    if (json.text === 'update prod') {
+      message = 'This is an experimental feature. Please notify @kaio before trying again.'
+    } else {
+      message = 'Please enter valid instructions.'
+    }
+  }
+
+  if (!stop) {
+    Flow.start(json)
+  }
 
   const blocks = {
     "blocks": [
@@ -207,7 +228,7 @@ app.post('/deploy', async (req, res) => {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": response
+          "text": message,
         }
       }
     ]

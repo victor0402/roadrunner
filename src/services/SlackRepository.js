@@ -3,13 +3,15 @@ const repositoriesIdentifiers = {
     devGroup: '@elbigode',
     channel: 'test-gh',
     deployChannel: 'test-gh-deploy',
-    owner: 'codelittinc'
+    owner: 'codelittinc',
+    supports_deploy: true
   },
   'codelitt-v2': {
     devGroup: '@website-devs',
     channel: 'team-website-dev',
     deployChannel: 'team-website-deploy',
-    owner: 'codelittinc'
+    owner: 'codelittinc',
+    supports_deploy: true
   },
   'rolli': {
     devGroup: '@rolli-devs',
@@ -21,7 +23,8 @@ const repositoriesIdentifiers = {
     devGroup: '@team-maker-devs',
     channel: 'team-teammaker-dev',
     deployChannel: 'wg-teammaker-deploy',
-    owner: 'codelittinc'
+    owner: 'codelittinc',
+    supports_deploy: true
   },
   'zonda': {
     devGroup: '@zonda-devs',
