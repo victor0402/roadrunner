@@ -32,7 +32,7 @@ class SendChangelogFlow {
 
     Slack.getInstance().sendMessage({
       message: slackMessage,
-      slackChannel: deployChannel,
+      channel: deployChannel,
     });
   };
 
