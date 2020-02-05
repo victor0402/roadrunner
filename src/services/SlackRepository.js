@@ -104,6 +104,15 @@ const getRepositoryDataByDeployChannel = (channel) => {
   }
 };
 
+const getRepositoryDataByServer = (server) => {
+  const key = Object.keys(repositoriesIdentifiers).find(k => {
+    const v = repositoriesIdentifiers[k];
+    return v.servers && v.servers.indexOf(server) >= 0;
+  })
+
+  return repositoriesIdentifiers[key];
+};
+
 const getSlackUser = (ghUser) => ghToSlackUsers[ghUser.toLowerCase()]
 const getAdminSlackUser = () => 'kaiomagalhaes';
 
@@ -112,5 +121,6 @@ export default {
   data: repositoriesIdentifiers,
   getSlackUser,
   getAdminSlackUser,
-  getRepositoryDataByDeployChannel
+  getRepositoryDataByDeployChannel,
+  getRepositoryDataByServer
 };

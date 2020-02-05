@@ -7,6 +7,7 @@ import { SlackRepository, Github, Slack } from '@services';
 import { PullRequest, SlackMessage } from './models';
 import Flows from './Flows/index';
 import ReleaseFlow from './Flows/ReleaseFlow';
+import NotifyDeploymentFlow from './Flows/NotifyDeploymentFlow';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';
 import checkRunFailureJson from './payload-examples/checkRunFailure.json';
@@ -236,5 +237,15 @@ app.post('/deploy', async (req, res) => {
   res.send(blocks);
 })
 
+app.post('/notify-deploy', async (req, res) => {
+  const json = req.body;
+  const Flow = NotifyDeploymentFlow;
+
+  const flowName = Flow.name;
+  console.log(`Start: ${flowName}`)
+  Flow.start(json)
+  console.log(`End: ${flowName}`)
+  res.sendStatus(200);
+})
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
