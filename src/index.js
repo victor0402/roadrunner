@@ -3,9 +3,10 @@ dotenv.config()
 
 import bodyParser from 'body-parser';
 import express from 'express';
-import { SlackRepository, Github, Database } from '@services';
+import { SlackRepository, Github, Slack } from '@services';
 import { PullRequest, SlackMessage } from './models';
 import Flows from './Flows/index';
+import ReleaseFlow from './Flows/ReleaseFlow';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';
 import checkRunFailureJson from './payload-examples/checkRunFailure.json';
@@ -17,6 +18,7 @@ import submitReviewChangesRequested from './payload-examples/submitReviewChanges
 
 const app = express()
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 const PORT = process.env.PORT || 3000
 
@@ -50,10 +52,10 @@ app.get('/', async (req, res) => {
 })
 
 const getPullRequestsJSON = async (prs) => {
-//  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
+  //  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
 
- // prs = [prs[prs.length -1]]
- // prs = prs.filter(pr => pr.id === '5e1a46fa7afaf493c222cb87')
+  // prs = [prs[prs.length -1]]
+  // prs = prs.filter(pr => pr.id === '5e1a46fa7afaf493c222cb87')
 
   await Promise.all(prs.map(pr => pr.getReviews()));
 
@@ -82,15 +84,15 @@ const getPullRequestsJSON = async (prs) => {
     const getListOrFirst = (list) => {
       if (list.length > 1) {
         return list;
-      } else if(list.length === 1) {
+      } else if (list.length === 1) {
         return list[0]
-      } 
+      }
     }
 
     return {
       title: pr.title,
       link: pr.link,
-      ci_state: pr.ciState ?  pr.ciState : 'unavailable',
+      ci_state: pr.ciState ? pr.ciState : 'unavailable',
       approved_by: getListOrFirst(approvedByList),
       reproved_by: getListOrFirst(repprovedByList),
       new_changes_after_last_review_of: getListOrFirst(outdatedReviewsUsernames)
@@ -115,7 +117,7 @@ app.get(`/open-prs/:devGroup`, async (req, res) => {
 })
 
 app.get('/open-prs', async (req, res) => {
-  let prs = await PullRequest.list({repositoryName: {$ne: 'gh-hooks-repo-test'}, state: 'open' })
+  let prs = await PullRequest.list({ repositoryName: { $ne: 'gh-hooks-repo-test' }, state: 'open' })
   const data = await getPullRequestsJSON(prs);
 
   res.send({
@@ -184,6 +186,34 @@ app.get('/test-github/:prId', async (req, res) => {
   res.send(commit)
 })
 
+app.get('/test-new-message', async (req, res) => {
+  const as = await Slack.sendMessage({ message: "POTATO", slackChannel: 'test-gh' })
+
+  res.send(as)
+})
+
+app.post('/deploy', async (req, res) => {
+  const json = req.body;
+  const Flow = ReleaseFlow;
+
+  const flowName = Flow.name;
+  console.log(`Start: ${flowName}`)
+  const response = await Flow.start(json)
+  console.log(`End: ${flowName}`)
+
+  const blocks = {
+    "blocks": [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": response
+        }
+      }
+    ]
+  }
+  res.send(blocks);
+})
 
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))

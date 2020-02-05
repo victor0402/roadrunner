@@ -14,7 +14,7 @@ class Github {
     return commits.data;
   }
 
-  static async getPullRequest({pullRequestId, owner, repository}) {
+  static async getPullRequest({ pullRequestId, owner, repository }) {
     const octokit = new Octokit({
       auth: process.env.GIT_AUTH
     });

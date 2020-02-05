@@ -2,60 +2,73 @@ const repositoriesIdentifiers = {
   'gh-hooks-repo-test': {
     devGroup: '@elbigode',
     channel: 'test-gh',
-    deployChannel: 'test-gh-deploy'
+    deployChannel: 'test-gh-deploy',
+    owner: 'codelittinc'
   },
   'codelitt-v2': {
     devGroup: '@website-devs',
     channel: 'team-website-dev',
-    deployChannel: 'team-website-deploy'
+    deployChannel: 'team-website-deploy',
+    owner: 'codelittinc'
   },
   'rolli': {
     devGroup: '@rolli-devs',
     channel: 'team-rolli-dev',
-    deployChannel: 'team-rolli-deploy'
+    deployChannel: 'team-rolli-deploy',
+    owner: 'codelittinc'
   },
   'team-maker': {
     devGroup: '@team-maker-devs',
     channel: 'team-teammaker-dev',
-    deployChannel: 'wg-teammaker-deploy'
+    deployChannel: 'wg-teammaker-deploy',
+    owner: 'codelittinc'
   },
   'zonda': {
     devGroup: '@zonda-devs',
     channel: 'team-zonda-dev',
-    deployChannel: 'wg-zonda-deploy'
+    deployChannel: 'wg-zonda-deploy',
+    owner: 'codelittinc'
   },
   'ay-design-library': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-design-library': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-properties-api': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-the-hub': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-excel-import-api': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-excel-import-app': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
   'ay-property-intelligence': {
     devGroup: '@ay-devs',
     channel: 'team-ay-pia-dev',
-    deployChannel: 'team-ay-pia-deploy'
+    deployChannel: 'team-ay-pia-deploy',
+    owner: 'codelittinc'
   },
   'ay-users-api': {
     devGroup: '@ay-devs',
-    channel: 'team-ay-dev'
+    channel: 'team-ay-dev',
+    owner: 'codelittinc'
   },
 }
 
@@ -75,6 +88,18 @@ const ghToSlackUsers = {
 };
 
 const getRepositoryData = (repositoryName) => repositoriesIdentifiers[repositoryName];
+const getRepositoryDataByDeployChannel = (channel) => {
+  const key = Object.keys(repositoriesIdentifiers).find(k => {
+    const v = repositoriesIdentifiers[k];
+    return v.deployChannel === channel;
+  })
+
+  return {
+    ...(repositoriesIdentifiers[key] || {}),
+    repository: key
+  }
+};
+
 const getSlackUser = (ghUser) => ghToSlackUsers[ghUser.toLowerCase()]
 const getAdminSlackUser = () => 'kaiomagalhaes';
 
@@ -82,5 +107,6 @@ export default {
   getRepositoryData,
   data: repositoriesIdentifiers,
   getSlackUser,
-  getAdminSlackUser
+  getAdminSlackUser,
+  getRepositoryDataByDeployChannel
 };

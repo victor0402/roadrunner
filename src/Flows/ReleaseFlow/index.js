@@ -1,9 +1,27 @@
 import { SlackRepository, Github, Slack } from '@services'
 
+const config = {
+  update: {
+    prod: {
+      head: 'qa',
+      base: 'master',
+    },
+    qa: {
+      head: 'develop',
+      base: 'qa'
+    },
+  }
+};
+
 class ReleaseFlow {
   static async start(json) {
-    const { head, base, repo, owner } = json;
-    const repositoryData = SlackRepository.getRepositoryData(repo);
+    const { channel_name, text, user_name } = json;
+    const repositoryData = SlackRepository.getRepositoryDataByDeployChannel(channel_name);
+    const { deployChannel, owner, repository } = repositoryData;
+
+    const [event, environment] = text.split(' ');
+
+    const { head, base } = config[event][environment];
 
     let pullRequest;
     let pullRequestCreationError;
@@ -11,28 +29,30 @@ class ReleaseFlow {
     try {
       pullRequest = await Github.createPullRequest({
         owner,
-        repo,
+        repo: repository,
         title: `Release ${head} to ${base}`,
         head,
         base
       });
     } catch (e) {
-      pullRequestCreationError = e.errors[0].message;
-    }
+      if (e.errors) {
+        pullRequestCreationError = e.errors[0].message;
+      } else {
+        pullRequestCreationError = e.toString();
+      }
+    };
 
     if (pullRequestCreationError) {
       if (pullRequestCreationError === 'No commits between qa and develop') {
-        const message = "The server already has the latest updates";
-        Slack.getInstance().sendMessage({
-          message,
-          channel: repositoryData.deployChannel
-        })
+        return "The server already has the latest updates";
       } else {
         const message = `${pullRequestCreationError} - ${JSON.stringify(json)}`;
         Slack.getInstance().sendDirectMessage({
           message,
           username: SlackRepository.getAdminSlackUser()
         });
+
+        return "There was an error with the deployment. I've notified @kaio and he will reach out to you soon.";
       }
 
       return;
@@ -45,11 +65,15 @@ class ReleaseFlow {
     try {
       merge = await Github.mergePullRequest({
         owner,
-        repo,
+        repo: repository,
         number
       });
     } catch (e) {
-      mergeError = e.errors[0].message;
+      if (e.errors) {
+        pullRequestCreationError = e.errors[0].message;
+      } else {
+        pullRequestCreationError = e.toString();
+      }
     }
 
     if (mergeError) {
@@ -57,16 +81,20 @@ class ReleaseFlow {
         message: `${mergeError} - ${JSON.stringify(json)}`,
         username: SlackRepository.getAdminSlackUser()
       });
+
+      return "There was an error with the deployment. I've notified @kaio and he will reach out to you soon.";
     } else {
       Slack.getInstance().sendMessage({
-        message: "The deployment just started, it will be done is a few minutes.",
-        channel: repositoryData.deployChannel
-      })
-    }
+        message: `The deployment was started by @${user_name}, it will be done is a few minutes.`,
+        channel: deployChannel
+      });
+
+      return "OK";
+    };
   };
 
   static async isFlow(json) {
-    return json.flow === 'release';
+    return json.text === 'update qa';
   };
 }
 

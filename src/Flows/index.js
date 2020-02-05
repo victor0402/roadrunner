@@ -6,24 +6,24 @@ import SendChangelogFlow from './SendChangelogFlow';
 import CheckRunFlow from './CheckRunFlow';
 import ReleaseFlow from './ReleaseFlow';
 
-const getFlow = async (json) => {
-  if (await NewPullRequestFlow.isFlow(json)) {
-    return NewPullRequestFlow;
-  } else if (await ClosePullRequestFlow.isFlow(json)) {
-    return ClosePullRequestFlow;
-  } else if (await NewReviewSubmissionFlow.isFlow(json)) {
-    return NewReviewSubmissionFlow;
-  } else if (await UpdatePullRequestCodeFlow.isFlow(json)) {
-    return UpdatePullRequestCodeFlow;
-  } else if (await SendChangelogFlow.isFlow(json)) {
-    return SendChangelogFlow;
-  } else if (await CheckRunFlow.isFlow(json)) {
-    return CheckRunFlow;
-  } else if (await ReleaseFlow.isFlow(json)) {
-    return ReleaseFlow;
-  }
+class Flow {
+  static async getFlow(json) {
+    if (await NewPullRequestFlow.isFlow(json)) {
+      return NewPullRequestFlow;
+    } else if (await ClosePullRequestFlow.isFlow(json)) {
+      return ClosePullRequestFlow;
+    } else if (await NewReviewSubmissionFlow.isFlow(json)) {
+      return NewReviewSubmissionFlow;
+    } else if (await UpdatePullRequestCodeFlow.isFlow(json)) {
+      return UpdatePullRequestCodeFlow;
+    } else if (await SendChangelogFlow.isFlow(json)) {
+      return SendChangelogFlow;
+    } else if (await CheckRunFlow.isFlow(json)) {
+      return CheckRunFlow;
+    } else if (await ReleaseFlow.isFlow(json)) {
+      return ReleaseFlow;
+    };
+  };
 }
 
-export default {
-  getFlow,
-}
+export default Flow;
