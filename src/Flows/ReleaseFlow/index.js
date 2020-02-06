@@ -16,9 +16,6 @@ const config = {
 class ReleaseFlow {
   static async start(json) {
     const { channel_name, text, user_name } = json;
-    if (text === 'update prod') {
-      return
-    }
 
     const repositoryData = SlackRepository.getRepositoryDataByDeployChannel(channel_name);
     const { deployChannel, owner, repository } = repositoryData;
