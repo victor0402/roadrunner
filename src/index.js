@@ -210,7 +210,7 @@ app.post('/deploy', async (req, res) => {
     stop = true;
   }
 
-  if (json.text !== 'update qa' || json.text === 'update prod') {
+  if (json.text !== 'update qa' || json.text !== 'update prod') {
     stop = true;
     message = 'Please enter valid instructions.'
   }
