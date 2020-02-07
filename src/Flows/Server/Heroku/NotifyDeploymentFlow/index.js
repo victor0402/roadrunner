@@ -1,8 +1,12 @@
 import { SlackRepository, Slack } from '@services'
 
 class NotifyDeploymentFlow {
-  static async start(json) {
-    const { app } = json;
+  constructor(data) {
+    this.data = data;
+  }
+
+  async run() {
+    const { app } = this.data;
     const repositoryData = SlackRepository.getRepositoryDataByServer(app)
 
     if (repositoryData) {
@@ -13,14 +17,14 @@ class NotifyDeploymentFlow {
       });
     } else {
       Slack.getInstance().sendDirectMessage({
-        message: JSON.stringify(json),
+        message: JSON.stringify(this.data),
         username: SlackRepository.getAdminSlackUser()
       });
     }
   };
 
-  static async isFlow(json) {
-    return json.app;
+  isFlow() {
+    return !!this.data.app;
   };
 }
 

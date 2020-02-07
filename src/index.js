@@ -7,7 +7,7 @@ import { SlackRepository } from '@services';
 import { PullRequest } from './models';
 import GithubFlow from './Flows/Repository/Github/GithubFlow';
 import ReleaseFlow from './Flows/Repository/Github/ReleaseFlow';
-import NotifyDeploymentFlow from './Flows/Server/Heroku/NotifyDeploymentFlow';
+import ServerFlow from './Flows/Server/ServerFlow';
 
 import addTestEndpoints from './addTestEndpoints';
 
@@ -159,15 +159,20 @@ app.post('/deploy', async (req, res) => {
   res.send(blocks);
 })
 
-app.post('/notify-deploy', async (req, res) => {
+const processFlow = (req, res, Flow) => {
   const json = req.body;
-  const Flow = NotifyDeploymentFlow;
+  const flow = new Flow(json);
 
-  const flowName = Flow.name;
+  const flowName = flow.constructor.name;
   console.log(`Start: ${flowName}`)
-  Flow.start(json)
+  flow.run()
   console.log(`End: ${flowName}`)
   res.sendStatus(200);
+
+} 
+
+app.post('/notify-deploy', (req, res) => {
+  processFlow(req, res, ServerFlow)
 })
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`))
