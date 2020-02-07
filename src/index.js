@@ -3,23 +3,19 @@ dotenv.config()
 
 import bodyParser from 'body-parser';
 import express from 'express';
-import { SlackRepository, Github, Slack } from '@services';
-import { PullRequest, SlackMessage } from './models';
+import { SlackRepository } from '@services';
+import { PullRequest } from './models';
 import GithubFlow from './Flows/Repository/Github/GithubFlow';
 import ReleaseFlow from './Flows/Repository/Github/ReleaseFlow';
 import NotifyDeploymentFlow from './Flows/Server/Heroku/NotifyDeploymentFlow';
 
-import checkRunPendingJson from './payload-examples/checkRunPending.json';
-import checkRunFailureJson from './payload-examples/checkRunFailure.json';
-import closePrJson from './payload-examples/closePR.json';
-import newFullPrJson from './payload-examples/newFullPR.json';
-import newChangeJson from './payload-examples/newPush.json';
-import submitReviewChangesApproved from './payload-examples/submitReviewChangesApproved.json';
-import submitReviewChangesRequested from './payload-examples/submitReviewChangesRequested.json';
+import addTestEndpoints from './addTestEndpoints';
 
 const app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+
+addTestEndpoints(app)
 
 const PORT = process.env.PORT || 3000
 
@@ -53,11 +49,6 @@ app.get('/', async (req, res) => {
 })
 
 const getPullRequestsJSON = async (prs) => {
-  //  prs = prs.filter(pr => pr.repositoryName !== 'gh-hooks-repo-test')
-
-  // prs = [prs[prs.length -1]]
-  // prs = prs.filter(pr => pr.id === '5e1a46fa7afaf493c222cb87')
-
   await Promise.all(prs.map(pr => pr.getReviews()));
 
   await Promise.all(prs.map(pr => pr.getChanges()));
@@ -126,71 +117,6 @@ app.get('/open-prs', async (req, res) => {
     length: data.length,
     data,
   })
-})
-
-app.get('/test-new-full-pr', async (req, res) => {
-  processFlowRequest({
-    body: newFullPrJson,
-  }, res)
-})
-
-app.get('/test-close-pr', async (req, res) => {
-  processFlowRequest({
-    body: closePrJson,
-  }, res)
-})
-
-app.get('/test-new-change', async (req, res) => {
-  processFlowRequest({
-    body: newChangeJson,
-  }, res)
-})
-
-app.get('/test-submit-review-changes-requested', async (req, res) => {
-  processFlowRequest({
-    body: submitReviewChangesRequested,
-  }, res)
-})
-
-app.get('/test-submit-review-changes-approved', async (req, res) => {
-  processFlowRequest({
-    body: submitReviewChangesApproved,
-  }, res)
-})
-
-app.get('/test-checkrun-pending', async (req, res) => {
-  processFlowRequest({
-    body: checkRunPendingJson,
-  }, res)
-})
-
-app.get('/test-checkrun-failure', async (req, res) => {
-  processFlowRequest({
-    body: checkRunFailureJson,
-  }, res)
-})
-
-app.post('/slack-callback', (req, res) => {
-  const json = req.body;
-  const { callbackIdentifier, slackThreadTS } = json;
-
-  const slackMessage = new SlackMessage(callbackIdentifier, slackThreadTS)
-  slackMessage.create()
-
-  res.sendStatus(200)
-})
-
-app.get('/test-github/:prId', async (req, res) => {
-  const prId = req.params.prId;
-  const commit = await Github.getCommits(prId)
-
-  res.send(commit)
-})
-
-app.get('/test-new-message', async (req, res) => {
-  const as = await Slack.sendMessage({ message: "POTATO", slackChannel: 'test-gh' })
-
-  res.send(as)
 })
 
 app.post('/deploy', async (req, res) => {
