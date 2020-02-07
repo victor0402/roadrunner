@@ -20,14 +20,14 @@ class ReleaseFlow {
     const repositoryData = SlackRepository.getRepositoryDataByDeployChannel(channel_name);
     const { deployChannel, owner, repository } = repositoryData;
 
-    Slack.getInstance().sendMessage({
-      message: `Deployment process started by @${json.user_name}`,
-      channel: deployChannel
-    });
-
     const [event, environment] = text.split(' ');
 
     const { head, base } = config[event][environment];
+    Slack.getInstance().sendMessage({
+      message: `Deployment process to *${environment.toUpperCase()}* process started by @${json.user_name}`,
+      channel: deployChannel
+    });
+
 
     let pullRequest;
     let pullRequestCreationError;
