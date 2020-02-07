@@ -1,4 +1,5 @@
 import HerokuFlow from './Heroku/HerokuFlow';
+import AzureAppCenterFlow from './AzureAppCenter/AzureAppCenterFlow';
 import { FlowNotFoundError } from '@errors';
 
 class ServerFlow {
@@ -11,8 +12,12 @@ class ServerFlow {
   }
 
   getFlow() {
-    const instance = new HerokuFlow(this.data);
-    const flow = instance.getFlow();
+    const flows = [HerokuFlow, AzureAppCenterFlow];
+    const flow = flows.map(F => {
+      const instance = new F(this.data);
+      return instance.getFlow();
+    }).filter(a => a)[0];
+
     if (flow) {
       return flow;
     }

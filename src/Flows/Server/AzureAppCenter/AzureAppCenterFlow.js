@@ -1,6 +1,6 @@
 import NotifyDeploymentFlow from './NotifyDeploymentFlow';
 
-class HerokuFlow {
+class AzureAppCenterFlow {
   constructor(data) {
     this.data = data;
   }
@@ -18,4 +18,4 @@ class HerokuFlow {
   }
 }
 
-export default HerokuFlow;
+export default AzureAppCenterFlow;
