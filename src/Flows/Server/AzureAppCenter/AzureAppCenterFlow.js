@@ -1,4 +1,4 @@
-import NotifyDeploymentFlow from './NotifyDeploymentFlow';
+import NotifyBuildResultFlow from './NotifyBuildResultFlow';
 
 class AzureAppCenterFlow {
   constructor(data) {
@@ -6,7 +6,7 @@ class AzureAppCenterFlow {
   }
 
   getFlow() {
-    const flows = [NotifyDeploymentFlow];
+    const flows = [NotifyBuildResultFlow];
     const Flow = flows.find(F => {
       const instance = new F(this.data);
       return instance.isFlow();
