@@ -1,6 +1,6 @@
 import { SlackRepository, Slack, Github } from '@services'
 import { PullRequest } from '@models';
-import pullRequestParser from '../../parsers/pullRequestParser'
+import pullRequestParser from '../parsers/pullRequestParser'
 
 class SendChangelogFlow {
   static async start(json) {

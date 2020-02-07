@@ -5,9 +5,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import { SlackRepository, Github, Slack } from '@services';
 import { PullRequest, SlackMessage } from './models';
-import Flows from './Flows/index';
-import ReleaseFlow from './Flows/ReleaseFlow';
-import NotifyDeploymentFlow from './Flows/NotifyDeploymentFlow';
+import GithubFlow from './Flows/Repository/Github/GithubFlow';
+import ReleaseFlow from './Flows/Repository/Github/ReleaseFlow';
+import NotifyDeploymentFlow from './Flows/Server/Heroku/NotifyDeploymentFlow';
 
 import checkRunPendingJson from './payload-examples/checkRunPending.json';
 import checkRunFailureJson from './payload-examples/checkRunFailure.json';
@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 3000
 const processFlowRequest = async (req, res) => {
   const json = req.body;
 
-  const Flow = await Flows.getFlow(json)
+  const Flow = await GithubFlow.getFlow(json)
 
   if (!Flow) {
     res.sendStatus(200)

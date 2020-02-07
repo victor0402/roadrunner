@@ -6,7 +6,7 @@ import SendChangelogFlow from './SendChangelogFlow';
 import CheckRunFlow from './CheckRunFlow';
 import ReleaseFlow from './ReleaseFlow';
 
-class Flow {
+class GithubFlow {
   static async getFlow(json) {
     if (await NewPullRequestFlow.isFlow(json)) {
       return NewPullRequestFlow;
@@ -26,4 +26,4 @@ class Flow {
   };
 }
 
-export default Flow;
+export default GithubFlow;

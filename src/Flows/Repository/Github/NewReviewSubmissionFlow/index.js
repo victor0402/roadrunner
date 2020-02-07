@@ -1,6 +1,6 @@
 import { SlackRepository, ChannelMessage, Github, DirectMessage } from '@services'
 import { PullRequestReview, PullRequest } from '@models';
-import pullRequestParser from '../../parsers/pullRequestParser'
+import pullRequestParser from '../parsers/pullRequestParser'
 
 const getContent = (json) => (
   {

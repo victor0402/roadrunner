@@ -1,6 +1,6 @@
 import { SlackRepository, ChannelMessage } from '@services'
 import { PullRequest, PullRequestChange } from '@models';
-import pushChangeParser from '../../parsers/pushChangeParser'
+import pushChangeParser from '../parsers/pushChangeParser'
 
 class UpdatePullRequestCodeFlow {
   static async start(json) {

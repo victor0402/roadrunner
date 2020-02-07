@@ -1,6 +1,6 @@
 import { SlackRepository, Reactji, Github, ChannelMessage, DirectMessage } from '@services'
 import { PullRequest, Commit } from '@models';
-import pullRequestParser from '../../parsers/pullRequestParser'
+import pullRequestParser from '../parsers/pullRequestParser'
 
 class ClosePullRequestFlow {
   static async start(json) {
